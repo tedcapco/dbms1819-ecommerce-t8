@@ -1,0 +1,60 @@
+html {
+	width: 100%;
+	height: 100%;
+}
+.header {
+	font-weight: bold;
+	font-size: 40px;
+}
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+    padding: 2px 16px;
+}
+.gtr-img {
+	width: 360px;
+	height: 220px;
+}
+.text-center {
+	text-align: center;
+}
+.label-center {
+	position: relative;
+		left: 80px;
+}
+.order {
+	font-weight: bold;
+	font-size: 16px;
+}
+.order-center {
+	position: relative;
+		left: 100px;
+}
+.break-div {
+	height: 50px;
+}
+footer {
+	text-align: center;
+	padding: 20px;
+	background-color: #333;
+	color: #ccc;
+}
+.foot {
+	padding-top: 30px;
+}
+a:link {
+	color: #fff;
+	padding: 7px 10px;
+	font-weight: bold;
+	font-size: 16px;
+}
