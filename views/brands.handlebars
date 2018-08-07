@@ -1,0 +1,25 @@
+<div class="container">
+	<div class="jumbotron mt-2">
+		<h1 align="center">Brands</h1>
+		{{#each data}}
+			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
+				<div class="card bg-secondary text-light center">
+					<img class="card-img-top" src="{{this.pic}}" alt="">
+					<div class="card-body">
+						<h4 class="card-title">{{this.brand_name}}</h4>
+						<p class="card-text">
+							<h7 class="card-title">{{this.brand_description}}</h7>
+						</p>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+		<form method="GET" action="/brand/create">
+			<div class="form-group">
+					<div class="text-center">
+						<button type="submit" class="btn btn-success btn-block">Create Brand</button>
+					</div>
+				</div>
+		</form>
+	</div>
+</div>
