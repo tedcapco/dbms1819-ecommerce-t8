@@ -1,0 +1,29 @@
+<div class="container pb-5 mb-5" style="margin-top: 50px">
+  <div class="jumbotron mt-2">
+<div class="modal-body">
+         <form method="post" action="/updateproduct/{{rows.productsid}}">
+            <div class="form-group">
+              Products Name: <input type="text" class="form-control" value="{{rows.productsname}}" name="productsname" required>
+              Products Description:<input type="text" class="form-control"  value="{{rows.productsdesc}}" name="productsdesc">
+              Price: <input type="number" class="form-control" value="{{rows.productsprice}}" name="productsprice" required> 
+              Brand:       <div class="form-group">
+               <select class="form-control" name="brand" required>
+              {{#each brand.[0]}}
+              <option value ="{{this.id}}">{{this.name}}</option>
+              {{/each}}
+              </select>
+              Brand Description:<input type="text" class="form-control"  value="{{rows.branddesc}}" name="branddesc">
+              Category:               <select class="form-control" name="category" required>
+              {{#each brand.[1]}}
+              <option value ="{{this.id}}">{{this.name}}</option>
+              {{/each}}
+              </select>
+              Image Link: <input type="text" class="form-control" value="{{rows.productspic}}" name="productspic">
+              <br>
+              <br>
+               <button type="submit" class="btn btn-success pull-right"><i class="fas fa-paper-plane" style="font-size:15px"></i>&nbsp;&nbsp;UPDATE </button>
+            </div>
+        </form>
+</div>
+</div>
+</div>

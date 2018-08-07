@@ -71,157 +71,141 @@ app.get('/products/:id', (req,res)=>{
 });
 
 
-app.get('/', function(req,res) { //product list
-	client.query('SELECT * FROM products ORDER BY products.id', (req, data)=>{
-		var list = [];
-		for (var i = 0; i < data.rows.length; i++) {
-			list.push(data.rows[i]);
-		}
-		res.render('home',{
-			data: list,
-			title: 'Product List'
-		});
+app.get('/brands', function(req, res) {
+		 client.query('SELECT * FROM products_brand')
+	.then((result)=>{
+	    console.log('results?', result);
+		res.render('brand-list', result);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
 	});
-});
 
-app.get('/product/create', (req,res)=>{	//CREATE PRODUCT html
-	client.query('SELECT * FROM products_category', (req, data)=>{
-		var list = [];
-		for (var i = 1; i < data.rows.length+1; i++) {
-				list.push(data.rows[i-1]);
-		}
-		client.query('SELECT * FROM brands', (req, data)=>{
-			var list2 = [];
-			for (var i = 1; i < data.rows.length+1; i++) {
-					list2.push(data.rows[i-1]);
-			}
-			res.render('product_create',{
-				data: list,
-				data2: list2
-			});
-		});
 	});
-});
 
-
-app.post('/', function(req,res) { //product list with insert new product
-	var values =[];
-	values = [req.body.product_name,req.body.product_description,req.body.tagline,req.body.price,req.body.warranty,req.body.pic,req.body.category_id,req.body.brand_id];
-	//console.log(req.body);
-	//console.log(values);
-	client.query("INSERT INTO products(product_name, product_description, tagline, price, warranty, pic, category_id, brand_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)", values, (err, res)=>{
-		if (err) {
-			console.log(err.stack)
-			}
-		else {
-			console.log(res.rows[0])
-		}
+app.get('/categories', function(req, res) {
+		 client.query('SELECT * FROM products_category')
+	.then((result)=>{
+	    console.log('results?', result);
+		res.render('category-list', result);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
 	});
-	res.redirect('/');
+
 	});
 
 
-app.post('/brands', function(req,res) { //brand list insert 
-	var values =[];
-	values = [req.body.brand_name,req.body.brand_description];
-	console.log(req.body);
-	console.log(values);
-	client.query("INSERT INTO brands(brand_name, brand_description) VALUES($1, $2)", values, (err, res)=>{
-		if (err) {
-			console.log(err.stack)
-			}
-		else {
-			console.log(res.rows[0])
-		}
-	});
+
+app.post('/insertbrand', function(req, res) {
+	client.query("INSERT INTO products_brand (name,description) VALUES ('"+req.body.name+"','"+req.body.description+"')");
 	res.redirect('/brands');
 });
 
-
-
-app.get('/brands', (req,res)=>{ //brand list
-	client.query('SELECT * FROM brands', (req, data)=>{
-		var list = [];
-		for (var i = 1; i < data.rows.length+1; i++) {
-				list.push(data.rows[i-1]);
-		}
-		res.render('brands',{
-			data: list
-		});
-	});
-});
-
-app.get('/brand/create', (req,res)=>{ //route to create brand html
-	res.render('brand_create');
-});
-
-
-
-app.post('/categories', function(req,res){ //category list with insert new category query
-	var values =[];
-	values = [req.body.category_name];
-	console.log(req.body);
-	console.log(values);
-	client.query("INSERT INTO products_category(category_name) VALUES($1)", values, (err, res)=>{
-		if (err) {
-			console.log(err.stack)
-			}
-		else {
-			console.log(res.rows[0])
-		}
-	});
+app.post	('/insertcategory', function(req, res) {
+	client.query("INSERT INTO products_category (name) VALUES ('"+req.body.name+"')");
 	res.redirect('/categories');
 });
 
+app.post('/insertproduct', function(req, res) {
+	client.query("INSERT INTO products (name,descriptions,price,category_id,brand_id,pic) VALUES ('"+req.body.name+"', '"+req.body.descriptions+"', '"+req.body.price+"', '"+req.body.category+"', '"+req.body.brand+"','"+req.body.pic+"')");
+	res.redirect('/');
+});
 
-app.get('/categories', (req,res)=>{ //category list
-	client.query('SELECT * FROM products_category', (req, data)=>{
-		var list = [];
-		for (var i = 1; i < data.rows.length+1; i++) {
-				list.push(data.rows[i-1]);
-		}
-		res.render('categories',{
-			data: list
-		});
+app.post('/updateproduct/:id', function(req, res) {
+	client.query("UPDATE products SET name = '"+req.body.productsname+"', descriptions = '"+req.body.productsdesc+"', price = '"+req.body.productsprice+"',category_id = '"+req.body.category+"', brand_id = '"+req.body.brand+"', pic = '"+req.body.productspic+"'WHERE id = '"+req.params.id+"' ;");
+	client.query("UPDATE products_brand SET description = '"+req.body.branddesc+"' WHERE id ='"+req.params.id+"';");
+	
+	res.redirect('/');
+});
+
+
+app.get('/brand/create', function(req, res) {
+	res.render('create-brand',{
 	});
 });
 
-app.get('/category/create', (req,res)=>{ //route to create category
-	res.render('categories_create');
-});
-
-
-
-app.get('/product/update/:id', (req,res)=>{
-	var id = req.params.id;
-	client.query('SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id' , (req, data)=>{
-		var list = [];
-		//console.log(data);
-		for (var i = 1; i < data.rows.length+1; i++) {
-			if (i==id) {
-				list.push(data.rows[i-1]);
-			}
-		}
-		//console.log(list);
-			client.query('SELECT * FROM products_category', (req, data)=>{
-			var list2 = [];
-			for (var i = 1; i < data.rows.length+1; i++) {
-				list2.push(data.rows[i-1]);
-			}
-			client.query('SELECT * FROM brands', (req, data)=>{
-				var list3 = [];
-				for (var i = 1; i < data.rows.length+1; i++) {
-					list3.push(data.rows[i-1]);
-				}
-				res.render('product_update',{
-					products: list,
-					products_category: list2,
-					brands: list3
-				});
-			});
-		});
+app.get('/category/create', function(req, res) {
+	res.render('create-category',{
 	});
 });
+
+app.get('/product/create', function(req, res) {
+	 var category = []; 
+	 var brand = [];
+	 var both =[];
+	 client.query('SELECT * FROM products_brand')
+	.then((result)=>{
+	    brand = result.rows;
+	    console.log('brand:',brand);
+	     both.push(brand);
+	})
+	.catch((err) => {       
+		console.log('error',err);
+		res.send('Error!');
+	});
+    client.query('SELECT * FROM products_category')
+	.then((result)=>{
+	    category = result.rows;
+	    both.push(category);
+	    console.log(category);
+	    console.log(both);
+		res.render('create-product',{
+			rows: both
+		});
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+
+});
+
+app.get('/product/update/:id', function(req, res) {
+     var category = []; 
+	 var brand = [];
+	 var both =[];
+	  client.query('SELECT * FROM products_brand;')
+	.then((result)=>{
+		brand = result.rows;
+	    console.log('brand:',brand);
+	    both.push(brand);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+    client.query('SELECT * FROM products_category;')
+	.then((result)=>{
+		category = result.rows;
+	  
+	    both.push(category);
+	      console.log('both',both);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+	 client.query('SELECT products.id AS productsid,products.pic AS productspic,products.name AS productsname, products.descriptions AS productsdesc,products.price AS productsprice,products_brand.name AS productsbrand,products_brand.description AS branddesc,products_category.name AS categoryname FROM products INNER JOIN products_brand ON products.brand_id=products_brand.id INNER JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
+	.then((result)=>{
+		res.render('update-product', {
+			rows: result.rows[0],
+			brand: both
+		});
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+
+	});
+
+
+
+
+
 
 app.get('/edit', (req,res)=>{
 	var id = req.params.id;

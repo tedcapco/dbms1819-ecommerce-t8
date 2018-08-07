@@ -1,0 +1,52 @@
+<div class="container pb-5 mb-5" style="margin-top: 50px">
+  <div class="jumbotron mt-2">
+
+<div class="modal-body mx-auto white-text" style="width: 80%">
+  <form method="post" action="/insertproduct">
+      <h3><b><i>Product Name:</i></b></h3>
+      <div class="form-group">
+        <input type="name" class="form-control" id="name" placeholder="Enter Product Name" name="name" required=""> 
+      </div>
+    
+      <h3><b><i>Description: </i></b></h3>
+      <div class="form-group">
+        <input type="text" class="form-control" id="no" placeholder="Enter Description" name="descriptions">
+      </div>
+
+      <h3><b><i>Price:</i></b></h3>
+      <div class="form-group">
+        <input type="number" class="form-control" id="id" placeholder="Enter Price" name="price" required="" >
+      </div>
+
+      <h3><b><i>Category:</i></b></h3>
+      <div class="form-group">
+        <select class="form-control" name="category" required="">
+          {{#each rows.[1]}}
+          <option value ="{{this.id}}">{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+     <h3><b><i>Brand: </i></b></h3>
+      <div class="form-group">
+        <select class="form-control" name="brand" required="">
+          {{#each rows.[0]}}
+          <option value ="{{this.id}}">{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+     <h3><b><i>Image URL: </i></b></h3>
+      <div class="form-group">
+         <input type="text" class="form-control" id="image" placeholder="Enter Image Link (e.g https://facebook.com/pogi.png " name="pic">
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-lg" title="Submit contact form">
+            Submit
+            </button>
+
+      </div>
+  </form>
+</div>
+</div>
+</div>
