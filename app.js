@@ -240,6 +240,11 @@ app.listen(5000,function() {
 	console.log('Server started at port 5000');
 });
 
+app.listen(PORT);
+
+
+
+
 
 /*
 CREATE TABLE products_brand(id SERIAL PRIMARY KEY, product_id int, brand varchar(45), description varchar(250));
