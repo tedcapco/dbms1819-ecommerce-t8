@@ -1,0 +1,74 @@
+<div class="container pb-5 mb-5">
+  <div class="jumbotron mt-2">
+    <h2>Create Product</h2>
+    <form method="POST" action="/">
+      <div class="controls">
+        <div class="form-group">
+          <label class="control-label" for="product_name">Product Name *</label>
+          <div>
+            <input id="product_name" name="product_name" type="text" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="product_description">Product Description *</label>
+          <div>
+            <input id="product_description" name="product_description" type="text" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="tagline">Tagline *</label>
+          <div>
+            <input id="tagline" name="tagline" type="text" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="price">Price *</label>
+          <div>
+            <input id="price" name="price" type="number" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="warranty">Warranty (year)*</label>
+          <div>
+            <input id="warranty" name="warranty" type="number" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="pic">Picture link *</label>
+          <div>
+            <input id="pic" name="pic" type="text" placeholder="" class="form-control" required="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="category_id">Product Category *</label>
+          <div class="text-center">
+            <select name="category_id" class="form-control" required="">
+              <option value="">Choose one..</option>
+            {{#each data}}
+              <option value="{{this.id}}">{{this.category_name}}</option>
+             {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="brand_id">Brand *</label>
+          <div class="text-center">
+            <select name="brand_id" class="form-control" required="">
+              <option value=''>Choose one..</option>
+            {{#each data2}}
+              <option value='{{this.id}}'>{{this.brand_name}}</option>
+             {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="text-center">
+            <button type="submit" class="btn btn-success btn-block" title="Create product">
+            Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

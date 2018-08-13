@@ -1,0 +1,22 @@
+<div class="container">
+	<div class="jumbotron mt-2">
+		<h1 align="center">Categories</h1>
+		{{#each rows}}
+			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
+				<div class="card bg-secondary text-light center">
+					{{!-- <img class="card-img-top" src="{{this.pic}}" alt=""> --}}
+					<div class="card-body">
+						<h4 class="card-title">{{this.name}}</h4>
+					</div>
+				</div>
+			</div>
+		{{/each}}
+		<form method="GET" action="/category/create">
+			<div class="form-group">
+					<div class="text-center">
+						<button type="submit" class="btn btn-success btn-medium">Create Category</button>
+					</div>
+				</div>
+		</form>
+	</div>
+</div>

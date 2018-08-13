@@ -1,0 +1,70 @@
+<body>
+<div class="container">
+	{{#each data}}
+	<div class="split left">
+		<div class="centered">
+		<img style="max-width: 530px" src="{{this.product_picture}}" alt="Product">
+		<h2>Name: {{this.product_name}}</h2>
+		<p>Brand: {{this.brand_name}}</p>
+		<p>Type: {{this.category_name}}</p>
+		<p>Price: ₱{{this.product_price}}.00</p>
+		<p>{{this.product_description}}</p>
+		</div>
+	</div>
+
+	<div class="split right">
+ 		 <div class="centered">
+   		 <h2>Order Form</h2>
+   		 <h4>{{msg}}</h4>
+    		<form method="POST" action="{{this.product_id}}/send">
+    			<div class="controls">
+
+    				<div class="form-group">
+    				<label class="control-label" for="name">Name</label>
+    				<div>
+						<input id="name" name="name" type="text" placeholder="Full Name" class="form-control" required >
+					</div>
+					</div>
+
+					<div class="form-group">
+					<label class="control-label" for="phone">Phone</label>
+					<div>
+						<input id="phone" name="phone" type="number" maxlength="11" placeholder="Phone Number" class="form-control" required >
+					</div>
+					</div>
+
+					<div class="form-group">
+					<label class="control-label" for="email">Email</label>
+					<div>
+						<input id="email" name="email" type="text" placeholder="Email" class="form-control" required >
+					</div>
+					</div>
+
+					<div class="form-group">
+					<label class="control-label" for="productid">Product Name</label>
+					<div>
+						<input id="product_name" name="product_name" type="text" value="{{this.product_name}}" class="form-control" readonly >
+					</div>
+					</div>
+
+					<div class="form-group">
+					<label class="control-label" for="quantity">Quantity</label>
+					<div>
+						<input id="quantity" name="quantity" type="number" maxlength="2" min="0" max="10" class="form-control" required >
+					</div>
+					</div>
+
+					<div class="form-group">
+					<div class="text-center">
+						<button type="submit" class="btn btn-primary btn-lg" title="Submit contact form">Submit</button>
+					</div>
+					</div>
+
+			</div>
+			</form>
+  		</div>
+	</div>
+
+	{{/each}}	
+</div>
+</body>
