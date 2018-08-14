@@ -1,2 +1,3 @@
-# dbms1819-ecommerce-t8
-module-1
+dbms1819-ecommerce-t8
+
+TEAM 8
