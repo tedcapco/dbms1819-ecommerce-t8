@@ -31,7 +31,7 @@ CREATE TABLE "products" (
   "pic" VARCHAR(80),
   "category_id" INT REFERENCES products_category(id),
   "brand_id" INT REFERENCES brands(id)
-);
+); 
 
 CREATE TABLE "orders" (
   "id" SERIAL PRIMARY KEY,
