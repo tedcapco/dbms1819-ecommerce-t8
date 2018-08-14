@@ -245,6 +245,62 @@ app.post('/insertproduct', function(req, res) {
 	
 });
 
+app.get('/product/update/:id', function(req,res) {
+	var category = [];
+	var brand = [];
+	var product = [];
+	var both = [];
+	client.query('SELECT * FROM products_category')
+	.then((result)=>{
+		category = result.rows;
+		console.log('category:', category);
+		both.push(category);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+	client.query('SELECT * FROM brands')
+	.then((result)=>{
+		brand = result.rows;
+		console.log('brand:', brand);
+		both.push(brand);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+	client.query('SELECT products.product_id AS product_id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.product_price AS product_price, products.product_description AS product_description, products.brand_tagline AS brand_tagline, products.product_picture AS product_picture, products.warranty AS warranty FROM products LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id WHERE products.product_id = '+req.params.id+';')
+	.then((result)=>{
+		product = result.rows[0];
+		both.push(product);
+		console.log(product);
+		console.log(both);
+		res.render('product_update', {
+			rows: result.rows[0],
+			brand: both
+		});
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+});
+
+app.post('/product/update/:id/saving', function(req,res) {
+	client.query("UPDATE Products01 SET product_picture = '"+req.body.product_picture+"', product_name = '"+req.body.product_name+"', product_description = '"+req.body.product_description+"', brand_tagline = '"+req.body.brand_tagline+"', product_price = '"+req.body.product_price+"', warranty = '"+req.body.warranty+"', category_id = '"+req.body.category_id+"', brand_id = '"+req.body.brand_id+"' WHERE product_id = '"+req.params.id+"';")
+	.then(result=>{
+		console.log('results?', result);
+		res.redirect('/');
+	})
+	.catch(err => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+	
+});
+
+
 
 
 
