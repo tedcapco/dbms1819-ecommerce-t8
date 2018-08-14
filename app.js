@@ -236,14 +236,9 @@ app.post('/insertproduct', function(req, res) {
 	res.redirect('/');
 });
 
-app.listen(5000,function() {
-	console.log('Server started at port 5000');
+app.listen(process.env.PORT || 5000, function() {
+  console.log('Server has started');
 });
-
-app.listen(PORT);
-
-
-
 
 
 /*
