@@ -72,9 +72,10 @@ app.get('/products/:id', (req,res)=>{
 });
 
 app.get('/brands', function(req,res){
-	client.query("SELECT * FROM	products_brand")
+	client.query("SELECT * FROM	brands")
 	.then((result)=>{
-			res.render('brands',result);
+			console.log('results?', result);
+		res.render('brands', result);
 	})
 	.catch((err)=>{
 		console.log('error',err);
@@ -127,7 +128,7 @@ app.post('/brands', function(req,res) { //brand list insert
 	values = [req.body.brand_name,req.body.brand_description];
 	console.log(req.body);
 	console.log(values);
-	client.query("INSERT INTO products_brand(brand_name, brand_description) VALUES($1, $2)", values, (err, res)=>{
+	client.query("INSERT INTO brands(brand_name, brand_description) VALUES($1, $2)", values, (err, res)=>{
 		if (err) {
 			console.log(err.stack)
 			}
@@ -205,7 +206,7 @@ app.get('/product/create', function(req, res) {
 	 var category = []; 
 	 var brand = [];
 	 var both =[];
-	 client.query('SELECT * FROM products_brand')
+	 client.query('SELECT * FROM brands')
 	.then((result)=>{
 	    brand = result.rows;
 	    console.log('brand:',brand);
@@ -232,9 +233,20 @@ app.get('/product/create', function(req, res) {
 
 });
 app.post('/insertproduct', function(req, res) {
-	client.query("INSERT INTO Products01 (name, type, description, brand, price, pic) VALUES ('"+req.body.product_name+"','"+req.body.product_type+"','"+req.body.product_description+"', '"+req.body.product_brand+"', '"+req.body.product_price+"','"+req.body.product_pic+"')");
-	res.redirect('/');
+	client.query("INSERT INTO products (product_picture,product_name,product_description,brand_tagline,product_price,warranty,category_id,brand_id) VALUES ('"+req.body.product_picture+"','"+req.body.product_name+"','"+req.body.product_description+"','"+req.body.brand_tagline+"','"+req.body.product_price+"','"+req.body.warranty+"','"+req.body.category_id+"','"+req.body.brand_id+"')")
+	.then(result=>{
+		console.log('results?', result);
+		res.redirect('/');
+	})
+	.catch(err => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+	
 });
+
+
+
 
 
 
