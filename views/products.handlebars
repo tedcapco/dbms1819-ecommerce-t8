@@ -1,19 +1,19 @@
 <div class="container">
 	<div class="jumbotron mt-2">
 		{{#each data}}
-		<h1 class="mt-3 text-center">{{this.name}}</h1>
+		<h1 class="mt-3 text-center">{{this.product_name}}</h1>
 			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto" >
 				<div class="card bg-secondary text-light center"  height = "350" width="250">
 					<img class="card-img-top" src="{{this.pic}}" alt="" >
 					<div class="card-body" >
 						<!--<h4 class="card-title">Model Name: {{this.name}}</h4>
-						--><h4 class="card-title">Brand: {{this.brand}}</h4>
+						--><h4 class="card-title">Brand: {{this.brand_name}}</h4>
 							<h5 class="card-title">₱ {{this.price}}</h5>
 					
 						<p>
-							<h6 class="card-title">Type: {{this.type}}</h7>
+							<h6 class="card-title">Type: {{this.category_name}}</h7>
 						</p>
-							<h6 class="card-title">Description: {{this.description}}</h7>
+							<h6 class="card-title">Description: {{this.product_description}}</h7>
 					</div>
 				</div>
 			</div>

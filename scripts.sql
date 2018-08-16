@@ -25,10 +25,8 @@ CREATE TABLE "products" (
   "id" SERIAL PRIMARY KEY,
   "product_name" VARCHAR(80),
   "product_description" VARCHAR(500),
-  "tagline" VARCHAR(150),
   "price" FLOAT(2),
-  "warranty" INT,
-  "pic" VARCHAR(80),
+  "pic" VARCHAR(500),
   "category_id" INT REFERENCES products_category(id),
   "brand_id" INT REFERENCES brands(id)
 );
@@ -46,6 +44,3 @@ CREATE TABLE "customer_favorite_products" (
   "customer_id" INT REFERENCES customers(id),
   "product_id" INT REFERENCES products(id)
 );
-
-SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id;
-SELECT * FROM products LEFT OUTER JOIN products_category ON products.category_id = products_category.id ORDER BY products.id;

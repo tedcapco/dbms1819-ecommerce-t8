@@ -44,7 +44,7 @@ app.use(bodyParser.json());
 
 
 app.get('/', function(req,res) {
-	client.query('SELECT * FROM Products01', (req, data)=>{
+	client.query('SELECT * FROM products', (req, data)=>{
 		var list = [];
 		for (var i = 0; i < data.rows.length; i++) {
 			list.push(data.rows[i]);
@@ -58,7 +58,7 @@ app.get('/', function(req,res) {
 
 app.get('/products/:id', (req, res) => {
 	var id = req.params.id;
-	client.query('SELECT * FROM Products01 LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id', (req, data)=>{
+	client.query('SELECT * FROM products LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id', (req, data)=>{
 		var list = [];
 		for (var i = 0; i < data.rows.length+1; i++) {
 			if (i==id) {
@@ -134,7 +134,7 @@ app.get('/edit', (req,res)=>{
 });
 
 
-app.post('/products/:id/send', function(req, res) {
+/* app.post('/products/:id/send', function(req, res) {
 	console.log(req.body);
 	var id = req.params.id;
 	const output = `
@@ -176,7 +176,7 @@ app.post('/products/:id/send', function(req, res) {
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-        client.query('SELECT * FROM Products01', (req, data)=>{
+        client.query('SELECT * FROM products', (req, data)=>{
 			var list = [];
 			for (var i = 0; i < data.rows.length+1; i++) {
 				if (i==id) {
@@ -189,7 +189,7 @@ app.post('/products/:id/send', function(req, res) {
 			});
 		});
      });
-});
+}); */
 
 app.get('/product/create', function(req, res) {
 	 var category = []; 
@@ -222,7 +222,7 @@ app.get('/product/create', function(req, res) {
 
 });
 app.post('/insertproduct', function(req, res) {
-	client.query("INSERT INTO Products01 (pic,name,description,brand,price,type,category_id,brand_id) VALUES ('"+req.body.pic+"','"+req.body.name+"','"+req.body.description+"','"+req.body.brand+"','"+req.body.price+"','"+req.body.type+"','"+req.body.category_id+"','"+req.body.brand_id+"')")
+	client.query("INSERT INTO products (pic,product_name,product_description,price,category_id,brand_id) VALUES ('"+req.body.pic+"','"+req.body.product_name+"','"+req.body.product_description+"','"+req.body.price+"','"+req.body.category_id+"','"+req.body.brand_id+"')")
 	.then(result=>{
 		console.log('results?', result);
 		res.redirect('/');
@@ -277,7 +277,7 @@ app.get('/product/update/:id', function(req,res) {
 });
 
 app.post('/product/update/:id/saving', function(req,res) {
-	client.query("UPDATE Products01 SET product_picture = '"+req.body.product_picture+"', product_name = '"+req.body.product_name+"', product_description = '"+req.body.product_description+"', brand_tagline = '"+req.body.brand_tagline+"', product_price = '"+req.body.product_price+"', warranty = '"+req.body.warranty+"', category_id = '"+req.body.category_id+"', brand_id = '"+req.body.brand_id+"' WHERE product_id = '"+req.params.id+"';")
+	client.query("UPDATE products SET product_picture = '"+req.body.product_picture+"', product_name = '"+req.body.product_name+"', product_description = '"+req.body.product_description+"', brand_tagline = '"+req.body.brand_tagline+"', product_price = '"+req.body.product_price+"', warranty = '"+req.body.warranty+"', category_id = '"+req.body.category_id+"', brand_id = '"+req.body.brand_id+"' WHERE product_id = '"+req.params.id+"';")
 	.then(result=>{
 		console.log('results?', result);
 		res.redirect('/');
@@ -287,6 +287,30 @@ app.post('/product/update/:id/saving', function(req,res) {
 		res.send('Error!');
 	});
 	
+});
+
+app.get('/customers', function(req, res) {
+	client.query('SELECT * FROM customers')
+	.then((result)=>{
+		console.log('results?', result);
+		res.render('list_customer', result);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
+});
+
+app.get('/orders', function(req, res) {
+	client.query('SELECT * FROM orders')
+	.then((result)=>{
+		console.log('results?', result);
+		res.render('list_order', result);
+	})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error!');
+	});
 });
 
 
@@ -303,6 +327,13 @@ app.listen(process.env.PORT || 5000, function() {
 
 
 /*
-CREATE TABLE products_brand(id SERIAL PRIMARY KEY, product_id int, brand varchar(45), description varchar(250));
-CREATE TABLE products_category(id SERIAL PRIMARY KEY, product_id int, category varchar(455));
+INSERT INTO products(product_name,product_description,price,pic,category_id" INT REFERENCES products_category(id),
+brand_id" INT REFERENCES brands(id)
+);
+1. Captoe Black,https://images-na.ssl-images-amazon.com/images/I/51Dic30JKEL._UY395_.jpg
+2. Brogue Captoe Oak Brown,https://media.karousell.com/media/photos/products/2018/01/03/antonio_meccariello_brogue_captoe_oxford_1514987620_d17a16110
+3. Longwing Black,https://shop.r10s.jp/crispin/cabinet/alden/9751_01.jpg
+4.Double Monk Strap Black,https://www.afarleycountryattire.co.uk/wp-content/uploads/2014/06/barker-shoes-tunstall-double-monk-strap-black-calf.jpg
+5. Captoe Cognac Brown,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbsCvWmM6Z07EqusyCPBeqbjnv72XE5FJ5FXJ6OvkjNy12mw8sCA
+6. Longwing Cognac Brown, https://i.ebayimg.com/images/g/C00AAOSwD0lUckE9/s-l400.jpg
 */
