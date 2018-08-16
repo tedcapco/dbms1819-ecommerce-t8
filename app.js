@@ -56,9 +56,9 @@ app.get('/', function(req,res) {
 	});
 });
 
-app.get('/products/:id', (req,res)=>{
+app.get('/products/:id', (req, res) => {
 	var id = req.params.id;
-	client.query('SELECT * FROM Products01', (req, data)=>{
+	client.query('SELECT * FROM Products01 LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id', (req, data)=>{
 		var list = [];
 		for (var i = 0; i < data.rows.length+1; i++) {
 			if (i==id) {
@@ -107,21 +107,10 @@ app.get('/categories', function(req,res){
 	});
 });
 
-app.post('/categories', function(req,res){ //category list with insert new category query
-	var values =[];
-	values = [req.body.category_name];
-	console.log(req.body);
-	console.log(values);
-	client.query("INSERT INTO products_category(name) VALUES($1)", values, (err, res)=>{
-		if (err) {
-			console.log(err.stack)
-			}
-		else {
-			console.log(res.rows[0])
-		}
-	});
+app.post('/category/create/saving', function(req, res) {
+	client.query("INSERT INTO products_category (category_name) VALUES ('"+req.body.category_name+"')");
 	res.redirect('/categories');
-});
+})
 
 app.post('/brands', function(req,res) { //brand list insert 
 	var values =[];
@@ -233,14 +222,14 @@ app.get('/product/create', function(req, res) {
 
 });
 app.post('/insertproduct', function(req, res) {
-	client.query("INSERT INTO products (product_picture,product_name,product_description,brand_tagline,product_price,warranty,category_id,brand_id) VALUES ('"+req.body.product_picture+"','"+req.body.product_name+"','"+req.body.product_description+"','"+req.body.brand_tagline+"','"+req.body.product_price+"','"+req.body.warranty+"','"+req.body.category_id+"','"+req.body.brand_id+"')")
+	client.query("INSERT INTO Products01 (pic,name,description,brand,price,type,category_id,brand_id) VALUES ('"+req.body.pic+"','"+req.body.name+"','"+req.body.description+"','"+req.body.brand+"','"+req.body.price+"','"+req.body.type+"','"+req.body.category_id+"','"+req.body.brand_id+"')")
 	.then(result=>{
 		console.log('results?', result);
 		res.redirect('/');
 	})
 	.catch(err => {
 		console.log('error',err);
-		res.send('Error!');
+		res.send('Errorrrr!');
 	});
 	
 });
