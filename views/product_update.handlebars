@@ -1,75 +1,61 @@
 <div class="container pb-5 mb-5">
   <div class="jumbotron mt-2">
     <h2>Update Product</h2>
-    {{#each products}}
-    <form method="POST" action="/products/{{this.id}}">
-    {{/each}}
+    <form method="POST" action="/product/update/{{rows.id}}/saving">
       <div class="controls">
-        {{#each products}}
-        {{!-- <div class="form-group">
-          <label class="control-label" for="id">Product ID</label>
-          <div>
-            <input id="productid" name="id" type="text" value="{{this.id}}" class="form-control" required="" readonly="">
-          </div>
-        </div> --}}
         <div class="form-group">
           <label class="control-label" for="product_name">Product Name *</label>
           <div>
-            <input id="product_name" name="product_name" type="text" value="{{this.product_name}}" class="form-control" required="">
+            <input id="name" name="product_name" type="text" value="{{rows.name}}" class="form-control" required="">
           </div>
         </div>
+
         <div class="form-group">
-          <label class="control-label" for="product_description">Product Description *</label>
+          <label class="control-label" for="product_description">Description *</label>
           <div>
-            <input id="product_description" name="product_description" type="text" value="{{this.product_description}}" class="form-control" required="">
+            <input id="specification" name="product_description" type="text" value="{{rows.description}}" class="form-control" required="">
           </div>
         </div>
-     
+
         <div class="form-group">
-          <label class="control-label" for="price">Price *</label>
+            <label class="control-label" for="price">Price *</label>
+            <div>
+            <input id="price" value="{{rows.price}}" name="price" type="number" class="form-control" required="">
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="pic">Product Image *</label>
+            <div>
+            <input id="picture" value="{{rows.pic}}" name="pic" type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="category">Category *</label>
           <div>
-            <input id="price" name="price" type="number" value="{{this.price}}" class="form-control" required="">
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="control-label" for="pic">Picture link *</label>
-          <div>
-            <input id="pic" name="pic" type="text" value="{{this.pic}}" class="form-control" required="">
-          </div>
-        </div>
-        {{/each}}
-        <div class="form-group">
-          <label class="control-label" for="category_id">Product Category *</label>
-          <div class="text-center">
-            <select name="category_id" class="form-control">
-              {{#each products}}
-              <option value="{{this.category_id}}">Current Category: {{this.category_name}}</option>
-              {{/each}}
-            {{#each products_category}}
-              <option value="{{this.id}}">{{this.category_name}}</option>
-             {{/each}}
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="brand_id">Brand *</label>
-          <div class="text-center">
-            <select name="brand_id" class="form-control">
-              {{#each products}}
-              <option value='{{this.brand_id}}'>Current Brand: {{this.brand_name}}</option>
-              {{/each}}
-              {{#each brands}}
-              <option value='{{this.id}}'>{{this.brand_name}}</option>
+            <select class="form-control" id="category_id" name="category_id" required="">
+              {{#each brand.[0]}}
+                <option value="{{this.id}}">{{this.category_name}}</option>
               {{/each}}
             </select>
           </div>
         </div>
+
+        <div class="form-group">
+            <label class="control-label" for="brand">Brand *</label>
+            <div>
+            <select class="form-control" id="brand_id" name="brand_id" required="">
+                {{#each brand.[1]}}
+                <option value="{{this.id}}">{{this.brand_name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="text-center">
-            <button type="submit" class="btn btn-success btn-block" title="Update Product">
-            Update
-            </button>
+            <button type="submit" class="btn btn-primary btn-lg" title="Submit">Update Product</button>
           </div>
         </div>
       </div>

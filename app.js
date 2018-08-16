@@ -125,10 +125,10 @@ app.get('/products/:id', (req, res) => {
 		console.log ('results?',results);
 		res.render('products',{
 			id: results.rows[0].id,
-			name: results.rows[0].product_name,
-			specification: results.rows[0].product_description,
+			name: results.rows[0].name,
+			description: results.rows[0].description,
 			price: results.rows[0].price,
-			picture: results.rows[0].pic,
+			pic: results.rows[0].pic,
 			brand_name: results.rows[0].brand_name,
 			category_name: results.rows[0].category_name,
 			})
@@ -137,6 +137,60 @@ app.get('/products/:id', (req, res) => {
 			console.log('error',err);
 			res.send('Error products!');
 		});
+});
+
+
+// EMAIL
+app.post('/products/:id/send', function(req, res) {
+	client.query("INSERT INTO customers (email,first_name,last_name,street,municipality,province,zipcode) VALUES ('"+req.body.email+"','"+req.body.first_name+"','"+req.body.last_name+"','"+req.body.street+"','"+req.body.municipality+"','"+req.body.province+"','"+req.body.zipcode+"') ON CONFLICT (email) DO UPDATE SET first_name = '"+req.body.first_name+"', last_name = '"+req.body.last_name+"', street = '"+req.body.street+"',municipality = '"+req.body.municipality+"',province = '"+req.body.province+"',zipcode = '"+req.body.zipcode+"' WHERE customers.email ='"+req.body.email+"';");
+	client.query("SELECT id FROM customers WHERE email = '"+req.body.email+"';")
+   	.then((results)=>{
+   		var id = results.rows[0].id;
+   		console.log(id);
+   		client.query("INSERT INTO orders (customer_id,product_id,quantity) VALUES ("+id+","+req.params.id+",'"+req.body.quantity+"')")
+   		.then((results)=>{
+			var maillist = ['dbms1819team8@gmail.com',req.body.email];
+			var transporter = nodemailer.createTransport({
+				host: 'smtp.gmail.com',
+				port: 465,
+				secure: true,
+				auth: {
+					user: 'dbms1819team8@gmail.com',
+					pass: 'capcogarciat8'
+				}
+			});
+      const mailOptions = {
+          from: '"Shoop Shop" <dbms1819team8@gmail.com>', // sender address
+          to: maillist, // list of receivers
+          subject: 'Details of order from Shoop', // Subject line
+          html: 
+				'<p>You have a new contact request</p>'+
+				'<h3>Customer Details</h3>'+
+					'<ul>'+
+						'<li>Customer Name: '+req.body.first_name+' '+req.body.last_name+'</li>'+
+						'<li>Email: '+req.body.email+'</li>'+
+						'<li>Product Name: '+req.body.name+'</li>'+
+						'<li>Quantity: '+req.body.quantity+'</li>'+
+					'</ul>'
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {	
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);;
+          res.redirect('/');
+          });
+   		})
+   		.catch((err)=>{
+   		console.log('error',err);
+		res.send('Error in e-mail!');
+   		});
+   	})
+   	.catch((err) => {
+		console.log('error',err);
+		res.send('Error in products sending!');
+	});
 });
 
 /*app.post('/brands', function(req,res) { //brand list insert 
@@ -280,7 +334,7 @@ app.get('/product/update/:id', function(req,res) {
 	})
 	.catch((err) => {
 		console.log('error',err);
-		res.send('Error!');
+		res.send('Error product update!');
 	});
 	client.query('SELECT * FROM brands')
 	.then((result)=>{
@@ -292,7 +346,7 @@ app.get('/product/update/:id', function(req,res) {
 		console.log('error',err);
 		res.send('Error on Update!');
 	});
-	client.query('SELECT products.id AS id, products.name AS name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.specification AS specification, products.picture AS picture FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN categories ON products.category_id=categories.id WHERE products.id = '+req.params.id+';')
+	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
 	.then((result)=>{
 		product = result.rows[0];
 		both.push(product);
@@ -310,7 +364,7 @@ app.get('/product/update/:id', function(req,res) {
 });
 
 app.post('/product/update/:id/saving', function(req,res) {
-	client.query("UPDATE products SET product_picture = '"+req.body.product_picture+"', product_name = '"+req.body.product_name+"', product_description = '"+req.body.product_description+"', brand_tagline = '"+req.body.brand_tagline+"', product_price = '"+req.body.product_price+"', warranty = '"+req.body.warranty+"', category_id = '"+req.body.category_id+"', brand_id = '"+req.body.brand_id+"' WHERE product_id = '"+req.params.id+"';")
+	client.query("UPDATE products SET product_name = '"+req.body.product_name+"', product_description = '"+req.body.product_description+"', price = '"+req.body.price+"', category_id = '"+req.body.category_id+"', brand_id = '"+req.body.brand_id+"', pic = '"+req.body.pic+"'WHERE id = '"+req.params.id+"' ;")
 	.then(result=>{
 		console.log('results?', result);
 		res.redirect('/');
