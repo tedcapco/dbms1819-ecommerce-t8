@@ -94,6 +94,7 @@ app.post('/insertbrand', function(req,res) { //brand list insert
 	res.redirect('/brands');
 });
 
+
 app.get('/category/create', function(req,res){
 	res.render('category_create',{
 
@@ -108,7 +109,7 @@ app.get('/categories', function(req,res){
 	})
 	.catch((err)=>{
 		console.log('error',err);
-		res.send('ERROR!');
+		res.send('ERROR category list!');
 	});
 });
 
@@ -119,15 +120,15 @@ app.post('/category/create/saving', function(req, res) {
 
 
 app.get('/products/:id', (req, res) => {
-	client.query('SELECT products.id AS id, products.name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.description AS product_description, products.picture AS pic, brands.brand_name AS brand_name,  categories.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN categories ON products.category_id=categories.id WHERE products.id = '+req.params.id+';')
+	client.query('SELECT products.id AS id, products.product_name AS name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
 		.then((results)=>{
 		console.log ('results?',results);
 		res.render('products',{
 			id: results.rows[0].id,
 			name: results.rows[0].product_name,
-			specification: results.rows[0].product_specification,
-			price: results.rows[0].product_price,
-			picture: results.rows[0].product_picture,
+			specification: results.rows[0].product_description,
+			price: results.rows[0].price,
+			picture: results.rows[0].pic,
 			brand_name: results.rows[0].brand_name,
 			category_name: results.rows[0].category_name,
 			})
@@ -321,20 +322,23 @@ app.post('/product/update/:id/saving', function(req,res) {
 	
 });
 
+
+
+
 app.get('/customers', function(req, res) {
 	client.query('SELECT * FROM customers ORDER BY id DESC')
 	.then((result)=>{
 		console.log('results?', result);
-		res.render('customers', result);
+		res.render('list_customer', result);
 	})
 	.catch((err) => {
 		console.log('error',err);
-		res.send('Error sa customer list!');
+		res.send('Error on customer list!');
 	});
 });
 
 app.get('/customer/:id', (req, res) => {
-	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.city AS city,customers.state AS state,customers.zipcode AS zipcode,products.name AS name,orders.quantity AS quantity,orders.purchase_date AS purchase_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY purchase_date DESC;")
+	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.municipality AS municipality,customers.province AS province,customers.zipcode AS zipcode,products.product_name AS name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY order_date DESC;")
 	.then((result)=>{
 	   console.log('results?', result);
 		res.render('customer_details', result);
@@ -347,10 +351,10 @@ app.get('/customer/:id', (req, res) => {
 });
 
 app.get('/orders', function(req, res) {
-	 client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,products.name AS name,orders.quantity AS quantity,orders.purchase_date AS purchase_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id ORDER BY purchase_date DESC;")
+	 client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,products.product_name AS name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id ORDER BY order_date DESC;")
 	.then((result)=>{
 	    console.log('results?', result);
-		res.render('orders', result);
+		res.render('list_order', result);
 		})
 	.catch((err) => {
 		console.log('error',err);
@@ -358,10 +362,6 @@ app.get('/orders', function(req, res) {
 	});
 
 });
-
-
-
-
 
 
 
