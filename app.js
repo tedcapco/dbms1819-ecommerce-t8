@@ -5,6 +5,7 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const client = new Client({
 	database: 'de067mu7313q4f',
@@ -120,13 +121,13 @@ app.post('/category/create/saving', function(req, res) {
 
 
 app.get('/products/:id', (req, res) => {
-	client.query('SELECT products.id AS id, products.product_name AS name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
+	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
 		.then((results)=>{
 		console.log ('results?',results);
 		res.render('products',{
 			id: results.rows[0].id,
-			name: results.rows[0].name,
-			description: results.rows[0].description,
+			product_name: results.rows[0].product_name,
+			product_description: results.rows[0].product_description,
 			price: results.rows[0].price,
 			pic: results.rows[0].pic,
 			brand_name: results.rows[0].brand_name,
@@ -141,6 +142,8 @@ app.get('/products/:id', (req, res) => {
 
 
 // EMAIL
+
+
 app.post('/products/:id/send', function(req, res) {
 	client.query("INSERT INTO customers (email,first_name,last_name,street,municipality,province,zipcode) VALUES ('"+req.body.email+"','"+req.body.first_name+"','"+req.body.last_name+"','"+req.body.street+"','"+req.body.municipality+"','"+req.body.province+"','"+req.body.zipcode+"') ON CONFLICT (email) DO UPDATE SET first_name = '"+req.body.first_name+"', last_name = '"+req.body.last_name+"', street = '"+req.body.street+"',municipality = '"+req.body.municipality+"',province = '"+req.body.province+"',zipcode = '"+req.body.zipcode+"' WHERE customers.email ='"+req.body.email+"';");
 	client.query("SELECT id FROM customers WHERE email = '"+req.body.email+"';")
@@ -160,16 +163,16 @@ app.post('/products/:id/send', function(req, res) {
 				}
 			});
       const mailOptions = {
-          from: '"Shoop Shop" <dbms1819team8@gmail.com>', // sender address
+          from: '"Shoop" <dbms1819team8@gmail.com>', // sender address
           to: maillist, // list of receivers
-          subject: 'Details of order from Shoop', // Subject line
+          subject: 'Order Details', // Subject line
           html: 
 				'<p>You have a new contact request</p>'+
 				'<h3>Customer Details</h3>'+
 					'<ul>'+
 						'<li>Customer Name: '+req.body.first_name+' '+req.body.last_name+'</li>'+
 						'<li>Email: '+req.body.email+'</li>'+
-						'<li>Product Name: '+req.body.name+'</li>'+
+						'<li>Product Name: '+req.body.product_name+'</li>'+
 						'<li>Quantity: '+req.body.quantity+'</li>'+
 					'</ul>'
       };
@@ -189,9 +192,63 @@ app.post('/products/:id/send', function(req, res) {
    	})
    	.catch((err) => {
 		console.log('error',err);
-		res.send('Error in products sending!');
+		res.send('Error products sending!');
 	});
 });
+
+
+
+// app.post('/products/:id/send', function(req, res) {
+// 	client.query("INSERT INTO customers (email,first_name,last_name,street,municipality,province,zipcode) VALUES ('"+req.body.email+"','"+req.body.first_name+"','"+req.body.last_name+"','"+req.body.street+"','"+req.body.municipality+"','"+req.body.province+"','"+req.body.zipcode+"') ON CONFLICT (email) DO UPDATE SET first_name = '"+req.body.first_name+"', last_name = '"+req.body.last_name+"', street = '"+req.body.street+"',municipality = '"+req.body.municipality+"',province = '"+req.body.province+"',zipcode = '"+req.body.zipcode+"' WHERE customers.email ='"+req.body.email+"';");
+// 	client.query("SELECT id FROM customers WHERE email = '"+req.body.email+"';")
+//    	.then((results)=>{
+//    		var id = results.rows[0].id;
+//    		console.log(id);
+//    		client.query("INSERT INTO orders (customer_id,product_id,quantity) VALUES ("+id+","+req.params.id+",'"+req.body.quantity+"')")
+//    		.then((results)=>{
+// 			var maillist = ['dbms1819team8@gmail.com',req.body.email];
+// 			var transporter = nodemailer.createTransport({
+// 				host: 'smtp.gmail.com',
+// 				port: 465,
+// 				secure: true,
+// 				auth: {
+// 					user: 'dbms1819team8@gmail.com',
+// 					pass: 'capcogarciat8'
+// 				}
+// 			});
+//       const mailOptions = {
+//           from: '"Shoop Shop" <dbms1819team8@gmail.com>', // sender address
+//           to: maillist, // list of receivers
+//           subject: 'Details of order from Shoop', // Subject line
+//           html: 
+// 				'<p>You have a new contact request</p>'+
+// 				'<h3>Customer Details</h3>'+
+// 					'<ul>'+
+// 						'<li>Customer Name: '+req.body.first_name+' '+req.body.last_name+'</li>'+
+// 						'<li>Email: '+req.body.email+'</li>'+
+// 						'<li>Product Name: '+req.body.name+'</li>'+
+// 						'<li>Quantity: '+req.body.quantity+'</li>'+
+// 					'</ul>'
+//       };
+
+//       transporter.sendMail(mailOptions, (error, info) => {	
+//           if (error) {
+//               return console.log(error);
+//           }
+//           console.log('Message %s sent: %s', info.messageId, info.response);;
+//           res.redirect('/');
+//           });
+//    		})
+//    		.catch((err)=>{
+//    		console.log('error',err);
+// 		res.send('Error in e-mail!');
+//    		});
+//    	})
+//    	.catch((err) => {
+// 		console.log('error',err);
+// 		res.send('Error in products sending!');
+// 	});
+// });
 
 /*app.post('/brands', function(req,res) { //brand list insert 
 	var values =[];
@@ -392,7 +449,7 @@ app.get('/customers', function(req, res) {
 });
 
 app.get('/customer/:id', (req, res) => {
-	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.municipality AS municipality,customers.province AS province,customers.zipcode AS zipcode,products.product_name AS name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY order_date DESC;")
+	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.municipality AS municipality,customers.province AS province,customers.zipcode AS zipcode,products.product_name AS product_name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY order_date DESC;")
 	.then((result)=>{
 	   console.log('results?', result);
 		res.render('customer_details', result);
@@ -436,4 +493,5 @@ brand_id" INT REFERENCES brands(id)
 4.Double Monk Strap Black,https://www.afarleycountryattire.co.uk/wp-content/uploads/2014/06/barker-shoes-tunstall-double-monk-strap-black-calf.jpg
 5. Captoe Cognac Brown,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbsCvWmM6Z07EqusyCPBeqbjnv72XE5FJ5FXJ6OvkjNy12mw8sCA
 6. Longwing Cognac Brown, https://i.ebayimg.com/images/g/C00AAOSwD0lUckE9/s-l400.jpg
+CREATE UNIQUE INDEX CONCURRENTLY customers_id ON customers (id);ALTER TABLE customers ADD CONSTRAINT unique_id UNIQUE (email);
 */
