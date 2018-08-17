@@ -1,34 +1,31 @@
 <div class="container">
 	<div class="jumbotron mt-2">
-		{{#each data}}
-		<h1 class="mt-3 text-center">{{this.name}}</h1>
+		<h1 class="mt-3 text-center">{{product_name}}</h1>
 			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto" >
-				<div class="card bg-secondary text-light center"  height = "350" width="250">
-					<img class="card-img-top" src="{{this.pic}}" alt="" >
+				<div class="card bg-dark text-light center"  height = "350px" width="250px">
+					<img class="card-img-top" src="{{pic}}" alt="" style="max-width:350px;max-height:250px;" >
 					<div class="card-body" >
 						<!--<h4 class="card-title">Model Name: {{this.name}}</h4>
-						--><h4 class="card-title">Brand: {{this.brand}}</h4>
-							<h5 class="card-title">₱ {{this.price}}</h5>
-						<p class="card-text">
-							<h6 class="card-title">Warranty: 6 months parts and service warranty</h7>
-						</p>
+						--><h4 class="card-title">Brand: {{brand_name}}</h4>
+							<h5 class="card-title">₱ {{price}}.00</h5>
+					
 						<p>
-							<h6 class="card-title">Type: {{this.type}}</h7>
+							<h6 class="card-title">Category: {{category_name}}</h7>
 						</p>
-							<h6 class="card-title">Description: {{this.description}}</h7>
+							<h6 class="card-title">Description: {{product_description}}</h7>
 					</div>
 				</div>
 			</div>
-		{{/each}}
+		
 		<div class="form-group">
 			<div class="text-center">
-				{{#each data}}
-				<form method="GET" action="/product/update/{{this.id}}">
-					<button type="submit" class="btn btn-success btn-block" title="Update Product">
+				
+				<form method="GET" action="/product/update/{{id}}">
+					<button type="submit" class="btn btn-success btn-block" title="Update this Product">
 					Update Product
 					</button>
-				</form>
-				{{/each}}
+				</form> 
+				
 			</div>
 		</div>
 	</div>
@@ -36,50 +33,79 @@
 
 <div class="container pb-5 mb-5">
 	<div class="jumbotron mt-2">
-		<h2>Contact Form</h2>
-		<h4>{{msg}}</h4>
-		{{#each data}}
-		<form method="POST" action="{{this.id}}/send">
+		<h2>Order Form</h2>
+		<form method="POST" action="{{id}}/send">
 			<div class="controls">
-				<div class="form-group">
-					<label class="control-label" for="name">Name *</label>
-					<div>
-						<input id="name" name="name" type="text" placeholder="Type your name.." class="form-control" required="">
+						<div class="form-group">
+							<label class="control-label" for="quantity">Quantity</label>
+							<div>
+								<input id="quantity" name="quantity" type="number" class="form-control" required="" >
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label" for="first_name">First Name</label>
+							<div>
+								<input id="first_name" name="first_name" type="text" placeholder="First Name" class="form-control" required="" >
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label" for="last_name">Last Name</label>
+							<div>
+								<input id="last_name" name="last_name" type="text" placeholder="Last Name" class="form-control" required="" >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label" for="street">Street</label>
+							<div>
+								<input id="street" name="street" type="text" placeholder="Street" class="form-control" required="" >
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label" for="municipality">Municipality/City</label>
+							<div>
+								<input id="municipality" name="municipality" type="text" placeholder="City" class="form-control" required="" >
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label" for="province">Province</label>
+							<div>
+								<input id="province" name="province" type="text" placeholder="State" class="form-control" required="" >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label" for="email">Email</label>
+							<div>
+								<input id="email" name="email" type="text" placeholder="Email" class="form-control" required="" >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label" for="product_name">Product Name</label>
+							<div>
+								<input id="product_name" name="product_name" type="text" value="{{product_name}}" class="form-control" readonly="" >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label" for="zipcode">Zipcode</label>
+							<div>
+								<input id="zipcode" name="zipcode" type="number" class="form-control" required="" >
+							</div>
+						</div>
+
+						<div class="">
+							<div class="text-center">
+								<button type="submit" class="btn btn-primary btn-lg" title="Submit contact form">Order</button>
+							</div>
+						</div>
+
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="phone">Phone *</label>
-					<div>
-						<input id="phone" name="phone" type="number" placeholder="xxxxx" class="form-control" required="">
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="email">Email *</label>
-					<div>
-						<input id="email" name="email" type="text" placeholder="sample@gmail.com" class="form-control" required="">
-					</div>
-				</div>
-				{{!-- <div class="form-group">
-					<label class="control-label" for="productid">Product ID</label>
-					<div>
-						<input id="productid" name="productid" type="text" value="{{this.id}}" class="form-control" required="" readonly="">
-					</div>
-				</div> --}}
-				<div class="form-group">
-					<label class="control-label" for="quantity">Quantity *</label>
-					<div>
-						<input id="quantity" name="quantity" type="number" placeholder="" class="form-control" required="">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="text-center">
-						<button type="submit" class="btn btn-success btn-block" title="Submit contact form">
-						Submit
-						</button>
-					</div>
-				</div>
-				{{/each}}
-			</div>
 		</form>
 	</div>
 </div>

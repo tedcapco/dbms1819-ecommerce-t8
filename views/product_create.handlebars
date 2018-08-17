@@ -6,16 +6,16 @@
 				<div class="form-group">
 					<label class="control-label" for="product_name">Product Name *</label>
 					<div>
-						<input id="product_name" name="product_name" type="text" placeholder="Brand" class="form-control" required="">
+						<input id="product_name" name="product_name" type="text" placeholder="" class="form-control" required="">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="product_type">Product Category *</label>
 					<div class="text-center">
-						<select name="product_type" class="form-control" required="">
-							<option value="">Choose one..</option>
+						<select id="product_type" name="category_id" class="form-control" required="">
+							<option value="">SELECT</option>
 						{{#each rows.[1]}}
-						 	<option value="{{this.name}}">{{this.name}}</option>
+						 	<option value="{{this.id}}">{{this.category_name}}</option>
 						 {{/each}}
 						</select>
 					</div>
@@ -27,25 +27,25 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="price">Price *</label>
+					<label class="control-label" for="product_price">Price *</label>
 					<div>
-						<input id="product_price" name="product_price" type="number" placeholder="80000" class="form-control" required="">
+						<input id="product_price" name="price" type="number" placeholder="80000" class="form-control" required="">
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="pic">Picture link *</label>
+					<label class="control-label" for="product_pic">Picture link *</label>
 					<div>
-						<input id="product_pic" name="product_pic" type="text" placeholder="/name.png" class="form-control" required="">
+						<input id="product_pic" name="pic" type="text" placeholder="/name.png" class="form-control" required="">
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label class="control-label" for="product_brand">Brand *</label>
 					<div class="text-center">
-						<select name="product_brand" class="form-control" required="">
-							<option value=''>Choose one.</option>
+						<select id="product_brand" name="brand_id" class="form-control" required="">
+							<option value="">SELECT</option>
 						{{#each rows.[0]}}
-						 	<option value={{this.brand_name}}>{{this.brand_name}}</option>
+						 	<option value={{this.id}}>{{this.brand_name}}</option>
 						 {{/each}}
 						</select>
 					</div>
