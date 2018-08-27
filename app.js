@@ -448,11 +448,23 @@ app.get('/customers', function(req, res) {
 	});
 });
 
-app.get('/customer/:id', (req, res) => {
+app.get('/customers/:id', (req, res) => {
 	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.municipality AS municipality,customers.province AS province,customers.zipcode AS zipcode,products.product_name AS product_name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY order_date DESC;")
 	.then((result)=>{
 	   console.log('results?', result);
-		res.render('customer_details', result);
+		res.render('customer_details', {
+			first_name: result.rows[0].first_name,
+			last_name: result.rows[0].last_name,
+			email: result.rows[0].email,
+			street: result.rows[0].street,
+			municipality: result.rows[0].municipality,
+			province: result.rows[0].province,
+			zipcode: result.rows[0].zipcode,
+			product_name: result.rows[0].product_name,
+			quantity: result.rows[0].quantity,
+			order_date: result.rows[0].order_date,
+			rows: result.rows[0]
+		})
 	})
 	.catch((err) => {
 		console.log('error',err);
@@ -494,4 +506,6 @@ brand_id" INT REFERENCES brands(id)
 5. Captoe Cognac Brown,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbsCvWmM6Z07EqusyCPBeqbjnv72XE5FJ5FXJ6OvkjNy12mw8sCA
 6. Longwing Cognac Brown, https://i.ebayimg.com/images/g/C00AAOSwD0lUckE9/s-l400.jpg
 CREATE UNIQUE INDEX CONCURRENTLY customers_id ON customers (id);ALTER TABLE customers ADD CONSTRAINT unique_id UNIQUE (email);
+CREATE UNIQUE INDEX CONCURRENTLY tablename_columnname ON tablename (columnname);ALTER TABLE tablename ADD CONSTRAINT unique_columnname UNIQUE (columnname);
+
 */

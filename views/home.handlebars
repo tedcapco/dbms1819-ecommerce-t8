@@ -4,24 +4,18 @@
 		<div class="row mx-4">
 			{{#each data}}
 			<div class="col-lg-4 col-md-4 col-sm-12 mb-4 mx-auto">
-				<div class="card bg-secondary text-light center">
-					<a href="/products/{{this.id}}" class="text-light">
+				<div class="card text-light center" style="padding:5px;text-align:center;">
+					<h4 class="card-title"><span style="color:#000000;">{{this.brand}} {{this.product_name}}</span></h4>
 						<img class="card-img-top" src="{{this.pic}}">
 						<!-- style="object-fit: cover;" height="100em" -->
-						<div class="">
-								<h6 class="card-title text-center my-3">{{this.brand}} {{this.product_name}}</h5>
+						<a href="/products/{{this.id}}" class="text-light">
+						<div class="" style="padding:5px;">
+								<button type="button" class="btn btn-outline-primary btn-block">SEE MORE</button>
 						</div>
 					</a>
 				</div>
 			</div>
 			{{/each}}
 		</div>
-		<form method="GET" action="/product/create">
-			<div class="form-group">
-				<div class="text-center">
-					<button type="submit" class="btn btn-primary btn-block">Create Product</button>
-				</div>
-			</div>
-		</form>
 	</div>
 </div>
