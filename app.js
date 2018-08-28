@@ -91,10 +91,15 @@ app.get('/brands/create', function(req, res) {
 })
 
 app.post('/insertbrand', function(req,res) { //brand list insert 
-	client.query("INSERT INTO brands (brand_name,brand_description) VALUES ('"+req.body.brand_name+"','"+req.body.brand_description+"')");
+	client.query("INSERT INTO brands (brand_name,brand_description) VALUES ('"+req.body.brand_name+"','"+req.body.brand_description+"')")
+	.then((result)=>{
 	res.redirect('/brands');
+})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('INVALID input! Brand already exist!');
+	});
 });
-
 
 app.get('/category/create', function(req,res){
 	res.render('category_create',{
@@ -115,9 +120,15 @@ app.get('/categories', function(req,res){
 });
 
 app.post('/category/create/saving', function(req, res) {
-	client.query("INSERT INTO products_category (category_name) VALUES ('"+req.body.category_name+"')");
+	client.query("INSERT INTO products_category (category_name) VALUES ('"+req.body.category_name+"')")
+	.then((result)=>{
 	res.redirect('/categories');
 })
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('Invalid input! Category already exist!');
+	});
+});
 
 
 app.get('/products/:id', (req, res) => {
@@ -350,7 +361,7 @@ app.get('/product/create', function(req, res) {
 	})
 	.catch((err) => {
 		console.log('error',err);
-		res.send('Error on creating product!');
+		res.send('Error! Product already exist!');
 	});
 
 });
@@ -481,6 +492,22 @@ app.get('/orders', function(req, res) {
 
 });
 
+app.get('/orders', function(req, res) {
+	 client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,products.product_name AS name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id ORDER BY order_date DESC;")
+	.then((result)=>{
+	    console.log('results?', result);
+		res.render('list_order', result);
+		})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error on orders list!');
+	});
+
+});
+
+app.get('/admin', function(req,res) {
+	res.render('admin');
+});
 
 
 app.listen(process.env.PORT || 5000, function() {
@@ -501,5 +528,6 @@ brand_id" INT REFERENCES brands(id)
 5. Captoe Cognac Brown,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbsCvWmM6Z07EqusyCPBeqbjnv72XE5FJ5FXJ6OvkjNy12mw8sCA
 6. Longwing Cognac Brown, https://i.ebayimg.com/images/g/C00AAOSwD0lUckE9/s-l400.jpg
 CREATE UNIQUE INDEX CONCURRENTLY customers_id ON customers (id);ALTER TABLE customers ADD CONSTRAINT unique_id UNIQUE (email);
-CREATE UNIQUE INDEX CONCURRENTLY tablename_columnname ON tablename (columnname);ALTER TABLE tablename ADD CONSTRAINT unique_columnname UNIQUE (columnname);
+CREATE UNIQUE INDEX CONCURRENTLY brands_brand_name ON brands (brand_name);
+ALTER TABLE brands ADD CONSTRAINT unique_brand_name UNIQUE (brand_name);
 */
