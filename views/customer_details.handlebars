@@ -1,32 +1,32 @@
 <div class="container">
 	<div class="jumbotron mt-2">
-		<h1 style="text-align:center">Customers</h1>
-		{{#each rows}}
+		<h1 align="center">Customer Details:</h1>
+	
 			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
-				<div class="card bg-secondary text-light center">
+				<div class="card bg-default text-dark center">
 					<div class="card-body">
-						<h6 class="card-title">First name:     {{first_name}}</h6>
-						<h6 class="card-title">Last name:      {{last_name}}</h6>
-						<h6 class="card-title">E-mail:         {{email}}</h6>
-						<h6 class="card-title">Street:         {{street}}</h6>
-						<h6 class="card-title">Municipality/City:           {{municipality}}</h6>
-						<h6 class="card-title">Province:          {{province}}</h6>
-						<h6 class="card-title">Zip code:       {{zipcode}}</h6>
+						<h6 class="card-title">First name:		<span style="color:blue;">{{first_name}}</span></h6>
+						<h6 class="card-title">Last name:		<span style="color:blue;">{{last_name}}</span></h6>
+						<h6 class="card-title">E-mail:		<span style="color:blue;">{{email}}</span></h6>
+						<h6 class="card-title">Street:		<span style="color:blue;">{{street}}</span></h6>
+						<h6 class="card-title">Municipality/City:		<span style="color:blue;">{{municipality}}</h6>
+						<h6 class="card-title">Province:		<span style="color:blue;">{{province}}</span></h6>
+						<h6 class="card-title">Zip code:		<span style="color:blue;">{{zipcode}}</span></h6>
 					</div>
 				</div>
 			</div>
-		{{/each}}
-		<h1 align="center">Orders</h1>
-		{{#each rows}}
+		
+		<h1 align="center">Order Details:</h1>
+		
 			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
-				<div class="card bg-secondary text-light center">
+				<div class="card bg-default text-dark center">
 					<div class="card-body">
-						<h6 class="card-title">Ordered Product {{product_name}}</h6>
-						<h6 class="card-title">Quantity:       {{quantity}}</h6>
-						<h6 class="card-title">Order Date:     {{order_date}}</h6>
+						<h6 class="card-title">Ordered Product:		<span style="color:blue;">{{product_name}}</span></h6>
+						<h6 class="card-title">Quantity:		<span style="color:blue;">{{quantity}}</span></h6>
+						<h6 class="card-title">Order Date:		<span style="color:blue;">{{order_date}}</span></h6>
 					</div>
 				</div>
 			</div>
-		{{/each}}
+		
 	</div>
 </div>

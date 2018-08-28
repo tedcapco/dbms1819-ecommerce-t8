@@ -3,16 +3,16 @@
 		<h1 class="mt-3 text-center">{{product_name}}</h1>
 			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto" >
 				<div class="card bg-dark text-light center"  height = "350px" width="250px">
-					<img class="card-img-top" src="{{pic}}" alt="" style="max-width:350px;max-height:250px;" >
+					<img class="card-img-top text-center" src="{{pic}}" alt="" style="max-width:350px;max-height:250px;" >
 					<div class="card-body" >
 						<!--<h4 class="card-title">Model Name: {{this.name}}</h4>
-						--><h4 class="card-title">Brand: {{brand_name}}</h4>
-							<h5 class="card-title">₱ {{price}}.00</h5>
+						--><h4 class="card-title text-center">Brand: {{brand_name}}</h4>
+							<h5 class="card-title text-center">₱ {{price}}.00</h5>
 					
 						<p>
-							<h6 class="card-title">Category: {{category_name}}</h7>
+							<h6 class="card-title text-center">Category: {{category_name}}</h7>
 						</p>
-							<h6 class="card-title">Description: {{product_description}}</h7>
+							<h6 class="card-title text-center">Description: {{product_description}}</h7>
 					</div>
 				</div>
 			</div>
@@ -21,8 +21,8 @@
 			<div class="text-center">
 				
 				<form method="GET" action="/product/update/{{id}}">
-					<button type="submit" class="btn btn-success btn-block" title="Update this Product">
-					Update Product
+					<button type="submit" class="btn btn-outline-success btn-lg" title="Update Product">
+					Update this Product
 					</button>
 				</form> 
 				
@@ -33,7 +33,7 @@
 
 <div class="container pb-5 mb-5">
 	<div class="jumbotron mt-2">
-		<h2>Order Form</h2>
+		<h2 style="text-align:center;">Order Form</h2>
 		<form method="POST" action="{{id}}/send">
 			<div class="controls">
 						<div class="form-group">

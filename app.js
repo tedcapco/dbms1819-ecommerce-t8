@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-console.log('test');
+
 const client = new Client({
 	database: 'de067mu7313q4f',
 	user: 'jadjumlpkcstgp',
@@ -265,7 +265,6 @@ app.post('/products/:id/send', function(req, res) {
 	});
 	res.redirect('/brands');
 });
-
 app.get('/edit', (req,res)=>{
 	var id = req.params.id;
 	res.render('edit');
@@ -286,7 +285,6 @@ app.get('/edit', (req,res)=>{
 			<li>Quantity: ${req.body.quantity}</li>
 		</ul>
 	`;
-
 	//nodemailer
 	let transporter = nodemailer.createTransport({
         host: 'smtp.mail.gmail.com',
@@ -298,7 +296,6 @@ app.get('/edit', (req,res)=>{
           
         }
     });
-
     let mailOptions = {
         from: '"IEMania Mailer" <iemaniamailer@yahoo.com>',
         to: 'tedcapco@gmail.com, garcianashpatrick@gmail.com',
@@ -306,14 +303,12 @@ app.get('/edit', (req,res)=>{
         //text: req.body.name,
         html: output
     };
-
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
         client.query('SELECT * FROM products', (req, data)=>{
 			var list = [];
 			for (var i = 0; i < data.rows.length+1; i++) {
@@ -448,11 +443,23 @@ app.get('/customers', function(req, res) {
 	});
 });
 
-app.get('/customer/:id', (req, res) => {
+app.get('/customers/:id', (req, res) => {
 	client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,customers.street AS street,customers.municipality AS municipality,customers.province AS province,customers.zipcode AS zipcode,products.product_name AS product_name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id WHERE customers.id = "+req.params.id+"ORDER BY order_date DESC;")
 	.then((result)=>{
 	   console.log('results?', result);
-		res.render('customer_details', result);
+		res.render('customer_details', {
+			first_name: result.rows[0].first_name,
+			last_name: result.rows[0].last_name,
+			email: result.rows[0].email,
+			street: result.rows[0].street,
+			municipality: result.rows[0].municipality,
+			province: result.rows[0].province,
+			zipcode: result.rows[0].zipcode,
+			product_name: result.rows[0].product_name,
+			quantity: result.rows[0].quantity,
+			order_date: result.rows[0].order_date,
+			rows: result.rows[0]
+		})
 	})
 	.catch((err) => {
 		console.log('error',err);
@@ -494,4 +501,5 @@ brand_id" INT REFERENCES brands(id)
 5. Captoe Cognac Brown,https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbsCvWmM6Z07EqusyCPBeqbjnv72XE5FJ5FXJ6OvkjNy12mw8sCA
 6. Longwing Cognac Brown, https://i.ebayimg.com/images/g/C00AAOSwD0lUckE9/s-l400.jpg
 CREATE UNIQUE INDEX CONCURRENTLY customers_id ON customers (id);ALTER TABLE customers ADD CONSTRAINT unique_id UNIQUE (email);
+CREATE UNIQUE INDEX CONCURRENTLY tablename_columnname ON tablename (columnname);ALTER TABLE tablename ADD CONSTRAINT unique_columnname UNIQUE (columnname);
 */
