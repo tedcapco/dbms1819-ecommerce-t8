@@ -492,6 +492,22 @@ app.get('/orders', function(req, res) {
 
 });
 
+app.get('/orders', function(req, res) {
+	 client.query("SELECT customers.first_name AS first_name,customers.last_name AS last_name,customers.email AS email,products.product_name AS name,orders.quantity AS quantity,orders.order_date AS order_date FROM orders INNER JOIN customers ON customers.id=orders.customer_id INNER JOIN products ON products.id=orders.product_id ORDER BY order_date DESC;")
+	.then((result)=>{
+	    console.log('results?', result);
+		res.render('list_order', result);
+		})
+	.catch((err) => {
+		console.log('error',err);
+		res.send('Error on orders list!');
+	});
+
+});
+
+app.get('/admin', function(req,res) {
+	res.render('admin');
+});
 
 
 app.listen(process.env.PORT || 5000, function() {
