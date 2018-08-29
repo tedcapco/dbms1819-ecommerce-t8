@@ -17,10 +17,13 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "jquery": "^3.3.1",
+    "moment": "^2.22.2",
     "nodemailer": "^4.6.7",
-    "nodemon": "^1.18.3",
     "path": "^0.12.7",
     "pg": "^7.4.3",
     "popper.js": "^1.14.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
   }
 }
