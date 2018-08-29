@@ -47,57 +47,37 @@
 
 
 
+
 <div class="container">
 	<div class="jumbotron mt-2">
-		<h1 align="center">Customer Details</h1>
-	
-			<div class="container">
-
-			<table class="table table-striped">
-			    <thead>
-			      <tr class="text-center">
-			        <th>Firstname</th>
-			        <th>Lastname</th>
-			        <th>Email</th>
-			        <th>Street</th>
-			        <th>Municipality/City</th>
-			        <th>Province</th>
-			        <th>Zip code</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			      <tr class="text-center">
-			        <td><span style="color:blue;">{{first_name}}</span></td>
-			        <td><span style="color:blue;">{{last_name}}</span></td>
-			        <td><span style="color:blue;">{{email}}</span></td>
-			        <td><span style="color:blue;">{{street}}</span></td>
-			        <td><span style="color:blue;">{{municipality}}</span></td>
-			        <td><span style="color:blue;">{{province}}</span></td>
-			        <td><span style="color:blue;">{{zipcode}}</span></td>
-			      </tr>
-			    </tbody>
-  			</table>	
-  		<br><br>
-
-  		<h1 align="center">Order Details</h1>
-  			<table class="table table-striped">
-  				<thead>
-  					<tr class="text-center">
-  						<th>ORDERED PRODUCT</th>
-  						<th>QUANTITY</th>
-  						<th>ORDER DATE</th>
-  					</tr>
-  				</thead>
-  				<tbody>
-  					<tr class="text-center">
-  						<td><span style="color:blue;">{{product_name}}</span></td>
-  						<td><span style="color:blue;">{{quantity}}</span></td>
-  						<td><span style="color:blue;">{{order_date}}</span></td>
-  					</tr>
-  				</tbody>
-  			</table>
-
+		<h1 class="mt-3 text-center">{{product_name}}</h1>
+			<div class="col-lg-4 col-md-4 col-sm-4 mb-2 mx-auto" >
+				<div class="card bg-dark text-light center"  height = "350px" width="250px">
+					<img class="card-img-top text-center" src="{{pic}}" alt="" style="max-width:350px;max-height:250px;" >
+					<div class="card-body" >
+						<!--<h4 class="card-title">Model Name: {{this.name}}</h4>
+						--><h4 class="card-title text-center">Brand: {{brand_name}}</h4>
+							<h5 class="card-title text-center">₱ {{price}}.00</h5>
+					
+						<p>
+							<h6 class="card-title text-center">Category: {{category_name}}</h7>
+						</p>
+							<h6 class="card-title text-center">Description: {{product_description}}</h7>
+					</div>
+				</div>
+			</div>
 		
+		<div class="form-group">
+			<div class="text-center">
+				
+				<form method="GET" action="/product/update/{{id}}">
+					<button type="submit" class="btn btn-outline-success btn-lg" title="Update Product">
+					Update this Product
+					</button>
+				</form> 
+				
+			</div>
+		</div>
 	</div>
 </div>
 

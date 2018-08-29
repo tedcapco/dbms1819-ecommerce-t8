@@ -39,7 +39,7 @@
 					</li>
 		        </ul>	
 			</div>
-		</nav>
+		</nav>>
 
 
 
@@ -49,55 +49,23 @@
 
 <div class="container">
 	<div class="jumbotron mt-2">
-		<h1 align="center">Customer Details</h1>
-	
-			<div class="container">
-
-			<table class="table table-striped">
-			    <thead>
-			      <tr class="text-center">
-			        <th>Firstname</th>
-			        <th>Lastname</th>
-			        <th>Email</th>
-			        <th>Street</th>
-			        <th>Municipality/City</th>
-			        <th>Province</th>
-			        <th>Zip code</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			      <tr class="text-center">
-			        <td><span style="color:blue;">{{first_name}}</span></td>
-			        <td><span style="color:blue;">{{last_name}}</span></td>
-			        <td><span style="color:blue;">{{email}}</span></td>
-			        <td><span style="color:blue;">{{street}}</span></td>
-			        <td><span style="color:blue;">{{municipality}}</span></td>
-			        <td><span style="color:blue;">{{province}}</span></td>
-			        <td><span style="color:blue;">{{zipcode}}</span></td>
-			      </tr>
-			    </tbody>
-  			</table>	
-  		<br><br>
-
-  		<h1 align="center">Order Details</h1>
-  			<table class="table table-striped">
-  				<thead>
-  					<tr class="text-center">
-  						<th>ORDERED PRODUCT</th>
-  						<th>QUANTITY</th>
-  						<th>ORDER DATE</th>
-  					</tr>
-  				</thead>
-  				<tbody>
-  					<tr class="text-center">
-  						<td><span style="color:blue;">{{product_name}}</span></td>
-  						<td><span style="color:blue;">{{quantity}}</span></td>
-  						<td><span style="color:blue;">{{order_date}}</span></td>
-  					</tr>
-  				</tbody>
-  			</table>
-
-		
+		<h1 class="mt-0 mb-5 text-center">{{title}}</h1>
+		<div class="row mx-4">
+			{{#each data}}
+			<div class="col-lg-4 col-md-4 col-sm-12 mb-4 mx-auto">
+				<div class="card text-light center" style="padding:5px;text-align:center;">
+					<h4 class="card-title"><span style="color:#000000;">{{this.brand}} {{this.product_name}}</span></h4>
+						<img class="card-img-top" src="{{this.pic}}">
+						<!-- style="object-fit: cover;" height="100em" -->
+						<a href="/products/admin/{{this.id}}" class="text-light">
+						<div class="" style="padding:5px;">
+								<button type="button" class="btn btn-outline-primary btn-block">SEE MORE</button>
+						</div>
+					</a>
+				</div>
+			</div>
+			{{/each}}
+		</div>
 	</div>
 </div>
 
