@@ -98,6 +98,19 @@ app.get('/brands', function(req,res){
 	
 });
 
+app.get('/brands/client', function(req,res){
+	client.query("SELECT * FROM	brands")
+	.then((result)=>{
+			console.log('results?', result);
+		res.render('brands_client', result);
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR!');
+	});
+	
+});
+
 app.get('/brands/create', function(req, res) {
 	res.render('brand_create',{
 	});
@@ -124,6 +137,18 @@ app.get('/categories', function(req,res){
 	client.query("SELECT * FROM	products_category")
 	.then((result)=>{
 			res.render('categories',result);
+
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR category list!');
+	});
+});
+
+app.get('/categories/client', function(req,res){
+	client.query("SELECT * FROM	products_category")
+	.then((result)=>{
+			res.render('categories_client',result);
 
 	})
 	.catch((err)=>{
