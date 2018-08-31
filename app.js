@@ -57,19 +57,6 @@ app.get('/', function(req,res) {
 	});
 });
 
-app.get('/product/admin', function(req,res) {
-	client.query('SELECT * FROM products', (req, data)=>{
-		var list = [];
-		for (var i = 0; i < data.rows.length; i++) {
-			list.push(data.rows[i]);
-		}
-		res.render('product_admin',{
-			data: list,
-			title: 'Admin Product'
-		});
-	});
-});
-
 /*app.get('/products/:id', (req, res) => {
 	var id = req.params.id;
 	client.query('SELECT * FROM products LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id', (req, data)=>{
@@ -90,19 +77,6 @@ app.get('/brands', function(req,res){
 	.then((result)=>{
 			console.log('results?', result);
 		res.render('brands', result);
-	})
-	.catch((err)=>{
-		console.log('error',err);
-		res.send('ERROR!');
-	});
-	
-});
-
-app.get('/brands/client', function(req,res){
-	client.query("SELECT * FROM	brands")
-	.then((result)=>{
-			console.log('results?', result);
-		res.render('brands_client', result);
 	})
 	.catch((err)=>{
 		console.log('error',err);
@@ -145,18 +119,6 @@ app.get('/categories', function(req,res){
 	});
 });
 
-app.get('/categories/client', function(req,res){
-	client.query("SELECT * FROM	products_category")
-	.then((result)=>{
-			res.render('categories_client',result);
-
-	})
-	.catch((err)=>{
-		console.log('error',err);
-		res.send('ERROR category list!');
-	});
-});
-
 app.post('/category/create/saving', function(req, res) {
 	client.query("INSERT INTO products_category (category_name) VALUES ('"+req.body.category_name+"')")
 	.then((result)=>{
@@ -189,25 +151,6 @@ app.get('/products/:id', (req, res) => {
 		});
 });
 
-app.get('/products/admin/:id', (req, res) => {
-	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
-		.then((results)=>{
-		console.log ('results?',results);
-		res.render('products_admin',{
-			id: results.rows[0].id,
-			product_name: results.rows[0].product_name,
-			product_description: results.rows[0].product_description,
-			price: results.rows[0].price,
-			pic: results.rows[0].pic,
-			brand_name: results.rows[0].brand_name,
-			category_name: results.rows[0].category_name,
-			})
-		})
-		.catch((err) => {
-			console.log('error',err);
-			res.send('Error products!');
-		});
-});
 
 // EMAIL
 
@@ -587,4 +530,13 @@ brand_id" INT REFERENCES brands(id)
 CREATE UNIQUE INDEX CONCURRENTLY customers_id ON customers (id);ALTER TABLE customers ADD CONSTRAINT unique_id UNIQUE (email);
 CREATE UNIQUE INDEX CONCURRENTLY brands_brand_name ON brands (brand_name);
 ALTER TABLE brands ADD CONSTRAINT unique_brand_name UNIQUE (brand_name);
+
+TOP 10 Customer with most number of orders
+Top 10 Customers with highest payment
+Top 10 Most Ordered Products
+Top 10 Least Ordered Products
+Top 3 Most Ordered Brands
+Top 3 Most Ordered Categories
+Total Sales in the (Last 7 days, Last 30 days)
+Daily Order Counts in the Last 7 days
 */
