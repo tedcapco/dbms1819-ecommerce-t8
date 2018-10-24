@@ -1,0 +1,259 @@
+<nav class="navbar fixed-top navbar-expand-sm bg-dark text-light pindot">
+			<a class="navbar-brand" style="color:red">   ShoopShop</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="nav navbar-nav">
+					<li class="dropdown categ">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Products<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/product/admin">View Products</a></li>
+							<li><a href="/product/create">Create Products</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown categ">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Categories<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/Categories">View Categories</a></li>
+							<li><a href="/category/create">Create Categories</a></li>
+						</ul>
+					</li>
+
+					<li class="dropdown categ">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Brands<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/brands">View Brands</a></li>
+							<li><a href="/brands/Create">Create Brands</a></li>
+						</ul>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" href="/orders">Orders<span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" href="/customers">Customers<span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="dropdown categ">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Admin<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/">Customer</a></li>
+						</ul>
+					</li>
+		        </ul>	
+			</div>
+		</nav>
+
+		<div class="container">
+    <div class="jumbotron mt-2">
+    <h3 align="center">Shoop Shop Dashboard</h3><hr>
+        <div class="row">
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 10 Customers (Most Orders)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5" align="left">Customer</th>
+                                <th class="h5">Number of Orders</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            {{#each topCustomersMostOrder}}
+                            <tr>
+                                <td align="left">{{this.first_name}}  {{this.last_name}}</td>
+                                <td>{{this.count}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 10 Customers (Highest Payment)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                {{!-- <th>#</th> --}}
+                                <th class="h5" align="left">Customer</th>
+                                <th class="h5">Total Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each topCustomersHighestPayment}}
+                            <tr>
+                                {{!-- <td>{{this.}}</td> --}}
+                                <td align="left">{{this.first_name}}  {{this.last_name}}</td>
+                                <td align="left">Php {{number this.sum}}.00</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+<hr>
+        <div class="row">
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 10 Products (Most Ordered)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">Product Name</th>
+                                <th class="h5">Number of Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each mostOrderedProduct}}
+                            <tr>
+                                <td>{{this.product_name}}</td>
+                                 <td>{{this.total}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 10 Products (Least Ordered)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">Product Name</th>
+                                <th class="h5">Number of Orders</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            {{#each leastOrderedProduct}}
+                            <tr>
+                                <td>{{this.product_name}}</td>
+                                <td>{{this.total}}</td>
+                             </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+<hr>
+        <div class="row">
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 3 Brands (Most Ordered)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">Brand Name</th>
+                                <th class="h5">Number of Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each mostOrderedBrand}}
+                            <tr>
+                                <td>{{this.brand_name}}</td>
+                                 <td>{{this.total}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Top 3 Brands (Least Ordered)</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">Brand Name</th>
+                                <th class="h5">Number of Orders</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            {{#each mostOrderedCategory}}
+                            <tr>
+                                <td>{{this.category_name}}</td>
+                                <td>{{this.total}}</td>
+                             </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+<hr>
+        <div class="row">
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Total Sales </h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">For the Last 7 days</th>
+                                <th class="h5">For the Last 30 days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Php {{number totalSalesLast7days}}.00</td>
+                                <td>Php {{number totalSalesLast30days}}.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5" style="margin: 0 40px">
+            <h4 align="center">Daily Order Counts</h4>
+                <div class="row justify-content-center">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th class="h5">Order Count in the Last 8 days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>This day: {{zeroDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>1 day ago: {{oneDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>2 days ago: {{twoDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>3 days ago: {{threeDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>4 days ago: {{fourDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>5 days ago: {{fiveDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>6 days ago: {{sixDaysAgo}} order/s acquired.</td>
+                            </tr>
+                            <tr>
+                                <td>7 days ago: {{sevenDaysAgo}} order/s acquired.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+		<footer>
+			<div class="ft fixed-bottom">
+				<span class="foot-text">&copy; 2018 <span class="team">TEAM 8</span> <span class="labs">Loves</span> <span class="you">YOU!!</span></span>
+			</div>
+		</footer>

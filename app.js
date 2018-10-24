@@ -6,6 +6,12 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const NumeralHelper = require("handlebars.numeral");
+const Handlebars = require("handlebars");
+NumeralHelper.registerHelpers(Handlebars);
+
+const renderLayouts = require('layouts');
+const Admin = require('./models/admin');
 
 const client = new Client({
 	database: 'de067mu7313q4f',
@@ -57,6 +63,19 @@ app.get('/', function(req,res) {
 	});
 });
 
+app.get('/product/admin', function(req,res) {
+	client.query('SELECT * FROM products', (req, data)=>{
+		var list = [];
+		for (var i = 0; i < data.rows.length; i++) {
+			list.push(data.rows[i]);
+		}
+		res.render('product_admin',{
+			data: list,
+			title: 'Product List'
+		});
+	});
+});
+
 /*app.get('/products/:id', (req, res) => {
 	var id = req.params.id;
 	client.query('SELECT * FROM products LEFT JOIN brands ON products.brand_id=brands.brand_id RIGHT JOIN categories ON products.category_id=categories.category_id', (req, data)=>{
@@ -77,6 +96,19 @@ app.get('/brands', function(req,res){
 	.then((result)=>{
 			console.log('results?', result);
 		res.render('brands', result);
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR!');
+	});
+	
+});
+
+app.get('/brands/client', function(req,res){
+	client.query("SELECT * FROM	brands")
+	.then((result)=>{
+			console.log('results?', result);
+		res.render('brands_client', result);
 	})
 	.catch((err)=>{
 		console.log('error',err);
@@ -119,6 +151,17 @@ app.get('/categories', function(req,res){
 	});
 });
 
+app.get('/categories/client', function(req,res){
+	client.query("SELECT * FROM	products_category")
+	.then((result)=>{
+			res.render('categories_client',result);
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR category list!');
+	});
+});
+
 app.post('/category/create/saving', function(req, res) {
 	client.query("INSERT INTO products_category (category_name) VALUES ('"+req.body.category_name+"')")
 	.then((result)=>{
@@ -136,6 +179,26 @@ app.get('/products/:id', (req, res) => {
 		.then((results)=>{
 		console.log ('results?',results);
 		res.render('products',{
+			id: results.rows[0].id,
+			product_name: results.rows[0].product_name,
+			product_description: results.rows[0].product_description,
+			price: results.rows[0].price,
+			pic: results.rows[0].pic,
+			brand_name: results.rows[0].brand_name,
+			category_name: results.rows[0].category_name,
+			})
+		})
+		.catch((err) => {
+			console.log('error',err);
+			res.send('Error products!');
+		});
+});
+
+app.get('/products/admin/:id', (req, res) => {
+	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
+		.then((results)=>{
+		console.log ('results?',results);
+		res.render('products_admin',{
 			id: results.rows[0].id,
 			product_name: results.rows[0].product_name,
 			product_description: results.rows[0].product_description,
@@ -505,14 +568,90 @@ app.get('/orders', function(req, res) {
 
 });
 
-app.get('/admin', function(req,res) {
-	res.render('admin');
+// app.get('/admin', function(req,res) {
+// 	res.render('admin');
+// });
+
+//admin dashboard
+app.get('/admin', function(req, res) {
+	var topCustomersMostOrder;
+	var topCustomersHighestPayment;
+	var mostOrderedBrand
+	var mostOrderedProduct;
+	var leastOrderedProduct;
+Admin.topCustomersMostOrder(client,{},function(result){
+	console.log(result);
+      topCustomersMostOrder = result
+  });
+Admin.mostOrderedBrand(client,{},function(result){
+      mostOrderedBrand = result
+  });
+Admin.mostOrderedProduct(client,{},function(result){
+      mostOrderedProduct = result
+  });
+Admin.leastOrderedProduct(client,{},function(result){
+      leastOrderedProduct = result
+  });
+Admin.zeroDaysAgo(client,{},function(result){
+      zeroDaysAgo = result
+  });
+Admin.oneDaysAgo(client,{},function(result){
+      oneDaysAgo = result
+  });
+Admin.twoDaysAgo(client,{},function(result){
+      twoDaysAgo = result
+  });
+Admin.threeDaysAgo(client,{},function(result){
+      threeDaysAgo = result
+  });
+Admin.fourDaysAgo(client,{},function(result){
+      fourDaysAgo = result
+  });
+ Admin.fiveDaysAgo(client,{},function(result){
+      fiveDaysAgo = result
+  });
+ Admin.sixDaysAgo(client,{},function(result){
+      sixDaysAgo = result
+  });
+ Admin.sevenDaysAgo(client,{},function(result){
+      sevenDaysAgo = result
+  });
+ Admin.totalSalesLast7days(client,{},function(result){
+      totalSalesLast7days = result
+  });
+ Admin.totalSalesLast30days(client,{},function(result){
+      totalSalesLast30days = result
+  });
+Admin.topCustomersHighestPayment(client,{},function(result){
+	console.log(result);
+      res.render('admin_dashboard', {
+      	topCustomersHighestPayment : result,
+      zeroDaysAgo : zeroDaysAgo[0].count,
+      oneDaysAgo : oneDaysAgo[0].count,
+      twoDaysAgo : twoDaysAgo[0].count,
+      threeDaysAgo : threeDaysAgo[0].count,
+      fourDaysAgo : fourDaysAgo[0].count,
+      fiveDaysAgo : fiveDaysAgo[0].count,
+      sixDaysAgo : sixDaysAgo[0].count,
+      sevenDaysAgo : sevenDaysAgo[0].count,
+      totalSalesLast7days : totalSalesLast7days[0].sum,
+      totalSalesLast30days : totalSalesLast30days[0].sum,
+      	topCustomersMostOrder : topCustomersMostOrder,
+      	mostOrderedBrand : mostOrderedBrand,
+      	mostOrderedProduct : mostOrderedProduct,
+      	leastOrderedProduct : leastOrderedProduct,
+    	});
+	});
 });
+
+
+
 
 
 app.listen(process.env.PORT || 5000, function() {
   console.log('Server has started');
 });
+
 
 
 
