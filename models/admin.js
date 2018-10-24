@@ -181,6 +181,30 @@
         callback(result.rows)
       });
   },
+  getCustomerData: (client,id,callback) => {
+      const query =  `
+          select * from customers where id = '${id.id}'
+      `;
+      client.query(query,(req,result)=>{
+        callback(result.rows);
+      });
+  }, 
+  getById: (client,id,callback) => {
+      const query =  `
+          SELECT * FROM customers WHERE id = '${id}'
+      `;
+      client.query(query,(req,result)=>{
+        callback(result.rows[0]);
+      });
+    },
+    getByEmail: (client,email,callback) => {
+      const query =  `
+          select * from customers where email = '${email}'
+      `;
+      client.query(query,(req,result)=>{
+        callback(result.rows[0]);
+      });
+    }
 };
 
 module.exports = Admin;

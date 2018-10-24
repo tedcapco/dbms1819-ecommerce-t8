@@ -5,10 +5,10 @@
 			</button>
 
 			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="nav navbar-nav">
+				<ul class="nav navbar-nav mr-auto">
 					 <li class="nav-item active">
-            <a class="nav-link" href="/admin">Home<span class="sr-only">(current)</span></a>
-          </li>
+        			    <a class="nav-link" href="/admin">Home<span class="sr-only">(current)</span></a>
+        			  </li>
 
 					<li class="dropdown categ">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Products<span class="caret"></span></a>
@@ -41,14 +41,12 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/customers">Customers<span class="sr-only">(current)</span></a>
 					</li>
-
-					<li class="dropdown categ">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Admin<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="/">Customer</a></li>
-						</ul>
-					</li>
 		        </ul>	
+		         <ul class="nav navbar-nav navbar-right">
+                    <li class="nav-item">
+                      <a type="button" class="btn btn-primary btn-md nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
 			</div>
 		</nav>>
 
@@ -66,7 +64,7 @@
 			<div class="col-lg-4 col-md-4 col-sm-12 mb-4 mx-auto">
 				<div class="card text-light center" style="padding:5px;text-align:center;">
 					<h4 class="card-title"><span style="color:#000000;">{{this.brand}} {{this.product_name}}</span></h4>
-						<img class="card-img-top" src="{{this.pic}}">
+						<img class="card-img-top" src="{{this.pic}}" height="240" width="490">
 						<!-- style="object-fit: cover;" height="100em" -->
 						<a href="/products/admin/{{this.id}}" class="text-light">
 						<div class="" style="padding:5px;">

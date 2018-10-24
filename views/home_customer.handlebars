@@ -8,7 +8,7 @@
 				<ul class="nav navbar-nav mr-auto">
 					
 					<li class="nav-item active">
-						<a class="nav-link" href="/home">Products<span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="/products">Products<span class="sr-only">(current)</span></a>
 					</li>
 
 					<li class="nav-item active">
@@ -18,39 +18,40 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/categories/client">Categories<span class="sr-only">(current)</span></a>
 					</li>
-		        </ul>	
-		         <ul class="nav navbar-nav navbar-right">
+				</ul>
+				
+		        <ul class="nav navbar-nav navbar-right">
                     <li class="nav-item">
                       <a type="button" class="btn btn-primary btn-md nav-link" href="/logout">Logout</a>
                     </li>
-                </ul>
+                </ul>			        
 			</div>
 		</nav>
 
-
 <div class="container">
 	<div class="jumbotron mt-2">
-		<h1 align="center">Brands</h1>
-		{{#each rows}}
-			<div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
-				<div class="card bg-secondary text-light center">
-					{{!-- <img class="card-img-top" src="{{this.pic}}" alt=""> --}}
-					<div class="card-body">
-						<h4 class="card-title">{{this.brand_name}}</h4>
-						<p class="card-text">
-							<h7 class="card-title">{{this.brand_description}}</h7>
-						</p>
-					</div>
+		<h1 class="mt-0 mb-5 text-center">{{title}}</h1>
+		<div class="row mx-4">
+			{{#each data}}
+			<div class="col-lg-4 col-md-4 col-sm-12 mb-4 mx-auto">
+				<div class="card text-light center" style="padding:5px;text-align:center;">
+					<h4 class="card-title"><span style="color:#000000;">{{this.brand}} {{this.product_name}}</span></h4>
+						<img class="card-img-top" src="{{this.pic}}" height="240" width="490">
+						<!-- style="object-fit: cover;" height="100em" -->
+						<a href="/products/{{this.id}}" class="text-light">
+						<div class="" style="padding:5px;">
+								<button type="button" class="btn btn-outline-primary btn-block">SEE MORE</button>
+						</div>
+					</a>
 				</div>
 			</div>
-		{{/each}}
-		<form method="GET" action="/brands/create">
-			<div class="form-group">
-					<div class="text-center">
-						<!-- <button type="submit" class="btn btn-success btn-block">Create Brand</button> -->
-					</div>
-				</div>
-		</form>
+			{{/each}}
+		</div>
 	</div>
 </div>
 
+<footer>
+			<div class="ft">
+				<span class="foot-text">&copy; 2018 <span class="team">TEAM 8</span> <span class="labs">Loves</span> <span class="you">YOU!!</span></span>
+			</div>
+		</footer>

@@ -47,5 +47,9 @@ CREATE TABLE "customer_favorite_products" (
   "product_id" INT REFERENCES products(id)
 );
 
+ALTER TABLE customers ADD COLUMN user_type VARCHAR;
+ALTER TABLE customers ADD COLUMN password VARCHAR;
+INSERT INTO customers (first_name, last_name, email, street, municipality, province, zipcode, password, user_type) VALUES ('PatrickTed', 'Caga', 'dbms1819team8@gmail.com', 'Pureza', 'Manila', 'NCR', '1016', 'administrator', 'admin');
+
 SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id;
 SELECT * FROM products LEFT OUTER JOIN products_category ON products.category_id = products_category.id ORDER BY products.id;

@@ -9,6 +9,11 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const NumeralHelper = require("handlebars.numeral");
 const Handlebars = require("handlebars");
 NumeralHelper.registerHelpers(Handlebars);
+const passport = require('passport');
+const Strategy = require('passport-local').Strategy;
+const session = require('express-session');
+const MomentHandler = require("handlebars.moment");
+MomentHandler.registerHelpers(Handlebars);
 
 const renderLayouts = require('layouts');
 const Admin = require('./models/admin');
@@ -25,7 +30,7 @@ const client = new Client({
 const client = new Client({
 	database: 'storedb',
 	user: 'postgres',
-	password: 'admin',
+	password: '123456',
 	host: 'localhost',
 	port: 5432
 });
@@ -42,6 +47,8 @@ client.connect()
 
 //View engine setup
 const app = express();
+var role;
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -49,7 +56,102 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(session({ secret: 'secrethehe', resave: false, saveUninitialized: false }));
+app.use(passport.initialize()); 
+app.use(passport.session());
 
+
+
+
+// Log in
+passport.use(new Strategy({
+  usernameField: 'email',
+  passwordField: 'password'
+},
+  function(email, password, cb) {
+    Admin.getByEmail(client,email, function(user) {
+      if (!user) { return cb(null, false); }
+    
+      return cb(null, user);
+    });
+  })
+);
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  Admin.getById(client,id, function (user) {
+    cb(null, user);
+  });
+});
+
+function isAdmin(req, res, next) {
+   if (req.isAuthenticated()) {
+  Admin.getCustomerData(client,{id: req.user.id}, function(user){
+    role = user[0].user_type;
+    console.log('role:',role);
+    if (role == 'admin') {
+        return next();
+    }
+    else{
+      res.send('cannot access!');
+    }
+  });
+  }
+  else{
+res.redirect('/login');
+}
+}
+function isCustomer(req, res, next) {
+   if (req.isAuthenticated()) {
+  Admin.getCustomerData(client,{id: req.user.id}, function(user){
+    role = user[0].user_type;
+    console.log('role:',role);
+    if (role == 'customer') {
+        return next();
+    }
+    else{
+      res.send('cannot access!');
+    }
+  });
+  }
+  else{
+res.redirect('/login');
+}
+}
+
+app.get('/login', function(req, res) {
+  res.render('customer_login');
+});
+
+app.post('/login', 
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
+  Admin.getById(client, req.user.id, function(user){
+    role = user.user_type;
+    req.session.user = user;
+      console.log(req.session.user);
+    console.log('role:',role);
+    if (role == 'customer'){
+        res.redirect('/home')
+    }
+    else if (role == 'admin'){
+        res.redirect('/admin')
+    }
+     });
+  });
+
+app.post('/signup', function(req,res) {
+  client.query( "INSERT INTO customers (first_name, last_name, email, street, municipality, province, zipcode, password, user_type) VALUES ('"+req.body.first_name+"', '"+req.body.last_name+"', '"+req.body.email+"', '"+req.body.street+"', '"+req.body.municipality+"', '"+req.body.province+"', '"+req.body.zipcode+"', '"+req.body.password+"', 'customer')")
+      .then((results)=>{
+      res.redirect('/login')
+  });
+});
+
+
+// Home Page - client
 app.get('/', function(req,res) {
 	client.query('SELECT * FROM products', (req, data)=>{
 		var list = [];
@@ -63,6 +165,20 @@ app.get('/', function(req,res) {
 	});
 });
 
+app.get('/home', isCustomer, function(req,res) {
+	client.query('SELECT * FROM products', (req, data)=>{
+		var list = [];
+		for (var i = 0; i < data.rows.length; i++) {
+			list.push(data.rows[i]);
+		}
+		res.render('home_customer',{
+			data: list,
+			title: 'Product List'
+		});
+	});
+});
+
+// Home Page - admin
 app.get('/product/admin', function(req,res) {
 	client.query('SELECT * FROM products', (req, data)=>{
 		var list = [];
@@ -96,6 +212,19 @@ app.get('/brands', function(req,res){
 	.then((result)=>{
 			console.log('results?', result);
 		res.render('brands', result);
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR!');
+	});
+	
+});
+
+app.get('/brands/nocli', function(req,res){
+	client.query("SELECT * FROM	brands")
+	.then((result)=>{
+			console.log('results?', result);
+		res.render('brands-nocli', result);
 	})
 	.catch((err)=>{
 		console.log('error',err);
@@ -151,6 +280,19 @@ app.get('/categories', function(req,res){
 	});
 });
 
+app.get('/categories/nocli', function(req,res){
+	client.query("SELECT * FROM	products_category")
+	.then((result)=>{
+			res.render('categories_nocli',result);
+
+	})
+	.catch((err)=>{
+		console.log('error',err);
+		res.send('ERROR category list!');
+	});
+});
+
+
 app.get('/categories/client', function(req,res){
 	client.query("SELECT * FROM	products_category")
 	.then((result)=>{
@@ -174,11 +316,45 @@ app.post('/category/create/saving', function(req, res) {
 });
 
 
-app.get('/products/:id', (req, res) => {
+app.get('/products/:id', isCustomer, (req, res) => {
 	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
 		.then((results)=>{
 		console.log ('results?',results);
 		res.render('products',{
+			first_name: req.user.first_name,
+			last_name: req.user.last_name,
+			street: req.user.street,
+			municipality: req.user.municipality,
+			province: req.user.province,
+			email: req.user.email,
+			zipcode: req.user.zipcode,
+			id: results.rows[0].id,
+			product_name: results.rows[0].product_name,
+			product_description: results.rows[0].product_description,
+			price: results.rows[0].price,
+			pic: results.rows[0].pic,
+			brand_name: results.rows[0].brand_name,
+			category_name: results.rows[0].category_name,
+			})
+		})
+		.catch((err) => {
+			console.log('error',err);
+			res.send('Error products!');
+		});
+});
+
+app.get('/products/:id', isCustomer, (req, res) => {
+	client.query('SELECT products.id AS id, products.product_name AS product_name, products.category_id AS category_id, products.brand_id AS brand_id, products.price AS price, products.product_description AS product_description, products.pic AS pic, brands.brand_name AS brand_name,  products_category.category_name AS category_name FROM products LEFT JOIN brands ON products.brand_id=brands.id RIGHT JOIN products_category ON products.category_id=products_category.id WHERE products.id = '+req.params.id+';')
+		.then((results)=>{
+		console.log ('results?',results);
+		res.render('products',{
+			first_name: req.user.first_name,
+			last_name: req.user.last_name,
+			street: req.user.street,
+			municipality: req.user.municipality,
+			province: req.user.province,
+			email: req.user.email,
+			zipcode: req.user.zipcode,
 			id: results.rows[0].id,
 			product_name: results.rows[0].product_name,
 			product_description: results.rows[0].product_description,
@@ -529,10 +705,7 @@ app.get('/customers/:id', (req, res) => {
 			municipality: result.rows[0].municipality,
 			province: result.rows[0].province,
 			zipcode: result.rows[0].zipcode,
-			product_name: result.rows[0].product_name,
-			quantity: result.rows[0].quantity,
-			order_date: result.rows[0].order_date,
-			rows: result.rows[0]
+			rows: result.rows
 		})
 	})
 	.catch((err) => {
@@ -573,7 +746,7 @@ app.get('/orders', function(req, res) {
 // });
 
 //admin dashboard
-app.get('/admin', function(req, res) {
+app.get('/admin', isAdmin, function(req, res) {
 	var topCustomersMostOrder;
 	var topCustomersHighestPayment;
 	var mostOrderedBrand
@@ -645,7 +818,11 @@ Admin.topCustomersHighestPayment(client,{},function(result){
 });
 
 
-
+app.get('/logout', function(req, res){
+  req.session.destroy();
+  req.logout();
+  res.redirect('/login');
+});
 
 
 app.listen(process.env.PORT || 5000, function() {

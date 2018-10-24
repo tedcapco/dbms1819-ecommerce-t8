@@ -1,0 +1,118 @@
+<nav class="navbar fixed-top navbar-expand-sm bg-dark text-light pindot">
+			<a class="navbar-brand" style="color:red">   ShoopShop</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="nav navbar-nav mr-auto">
+					
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Products<span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" href="/brands/client">Brands<span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" href="/categories/client">Categories<span class="sr-only">(current)</span></a>
+					</li>
+				</ul>	      
+			</div>
+		</nav>
+
+<div class="container pb-5 mb-5">
+  <div class="jumbotron mt-2">
+    <h3 align="center">Log-in</h3>
+    <form method="POST" action="/login">
+      <div class="control-label">
+
+            <div class="form-group">
+              <label class="control-label" for="email">Email</label>
+              <div>
+                <input id="email" name="email" type="email" placeholder="email@email.com" class="form-control" required="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="password">Password</label>
+              <div>
+                <input id="password" name="password" type="password" placeholder="Password" class="form-control" required="" ="" >
+              </div>
+            </div>
+                <button style="margin:auto;" type="submit" class="btn btn-primary btn-lg" title="Submit contact form">Log-in</button>
+      </div>
+    </form> <br> 
+   
+   </div>
+
+<div class="jumbotron mt-2">
+    <h3 align="center">Sign-up</h3>
+    <form method="POST" action="/signup">
+      <div class="control-label">
+
+            <div class="form-group">
+              <label class="control-label" for="firstname">First Name</label>
+              <div>
+                <input id="firstname" name="first_name" type="text" placeholder="First Name" class="form-control" required="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="lastname">Last Name</label>
+              <div>
+                <input id="lastname" name="last_name" type="text" placeholder="Last Name" class="form-control" required="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="email">Email</label>
+              <div>
+                <input id="email" name="email" type="text" placeholder="email@email.com" class="form-control" required="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="password">Password</label>
+              <div>
+                <input id="password" name="password" type="password" placeholder="Password" class="form-control" required="" ="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="street">Street</label>
+              <div>
+                <input id="street" name="street" type="text" placeholder="Street" class="form-control" required="" ="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="Municipality">Municipality</label>
+              <div>
+                <input id="Municipality" name="municipality" type="text" placeholder="City/Municipality" class="form-control" required="" ="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="Province">Province</label>
+              <div>
+                <input id="Province" name="province" type="text" placeholder="State/Province" class="form-control" required="" ="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="zipcode">Zipcode</label>
+              <div>
+                <input id="zipcode" name="zipcode" type="text" placeholder="Zipcode" class="form-control" required="" ="" >
+              </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg" title="Submit contact form">Sign-up</button>
+            </div>
+      </div>
+    </form> 
+  </div>
+</div>
+</div>

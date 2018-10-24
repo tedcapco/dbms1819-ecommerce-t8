@@ -5,10 +5,10 @@
 			</button>
 
 			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="nav navbar-nav">
+				<ul class="nav navbar-nav mr-auto">
 					 <li class="nav-item active">
-            <a class="nav-link" href="/admin">Home<span class="sr-only">(current)</span></a>
-          </li>
+        			    <a class="nav-link" href="/admin">Home<span class="sr-only">(current)</span></a>
+     			     </li>
 
 					<li class="dropdown categ">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Products<span class="caret"></span></a>
@@ -41,14 +41,12 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="/customers">Customers<span class="sr-only">(current)</span></a>
 					</li>
-
-					<li class="dropdown categ">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="/">Admin<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="/">Customer</a></li>
-						</ul>
-					</li>
 		        </ul>	
+		         <ul class="nav navbar-nav navbar-right">
+                    <li class="nav-item">
+                      <a type="button" class="btn btn-primary btn-md nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
 			</div>
 		</nav>
 
@@ -79,7 +77,7 @@
 								<td style="padding:15px;">{{this.email}}</td>
 								<td style="padding:15px;">{{this.name}}</td>
 								<td style="padding:15px;">{{this.quantity}}</td>
-								<td style="padding:15px;">{{this.order_date}}</td>
+								<td style="padding:15px;">{{moment order_date local=true add='hours' amount='8' format="llll"}}</td>
 							</tr>
 					</tbody>	
 					{{/each}}
